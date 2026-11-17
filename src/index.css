@@ -240,6 +240,18 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+.card-dark .serif-title,
+.card-dark h1,
+.card-dark h2,
+.card-dark h3,
+.card-dark h4 {
+    color: #FFFFFF !important;
+}
+
+.card-dark p {
+    color: #E2E8F0;
+}
+
 .card-dark::before {
     content: '';
     position: absolute;
@@ -1204,6 +1216,22 @@ input.fintech-amount-input:active {
 [data-theme="pe"] .card-dark {
     background: linear-gradient(135deg, #260A0E 0%, #3B1218 100%) !important;
     box-shadow: 0 8px 24px -4px rgba(38, 10, 14, 0.25) !important;
+}
+
+[data-theme="pe"] .card-dark .serif-title,
+[data-theme="pe"] .card-dark h1,
+[data-theme="pe"] .card-dark h2,
+[data-theme="pe"] .card-dark h3,
+[data-theme="pe"] .card-dark h4 {
+    color: #FFFFFF !important;
+}
+
+[data-theme="pe"] .card-dark .eyebrow {
+    color: #FCA5A5 !important;
+}
+
+[data-theme="pe"] .card-dark p {
+    color: #FEE2E2 !important;
 }
 
 [data-theme="pe"] .card-dark::before {

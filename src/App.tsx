@@ -1730,7 +1730,7 @@ export default function App() {
               <FileCheck size={14} />
               <span>{t.docsEyebrow}</span>
             </span>
-            <h2 className="serif-title" style={{ fontSize: '1.75rem', marginBottom: '8px' }}>{t.docsTitle}</h2>
+            <h2 className="serif-title" style={{ fontSize: '1.75rem', marginBottom: '8px', color: '#FFFFFF' }}>{t.docsTitle}</h2>
             <p style={{ fontSize: '0.86rem', color: '#D4DFD9', marginBottom: '18px' }}>{t.docsSub}</p>
 
             {/* Stepper Visual */}
@@ -2542,7 +2542,7 @@ export default function App() {
 
           <div className="card-dark" style={{ cursor: 'pointer' }} onClick={() => navigate('screen-perfil')}>
             <span className="eyebrow" style={{ color: '#A8BDB2' }}>{t.guideAccountEyebrow}</span>
-            <h3 className="serif-title" style={{ fontSize: '1.45rem', marginBottom: '6px' }}>{t.guideAccountTitle}</h3>
+            <h3 className="serif-title" style={{ fontSize: '1.45rem', marginBottom: '6px', color: '#FFFFFF' }}>{t.guideAccountTitle}</h3>
             <p style={{ fontSize: '0.86rem', color: '#D4DFD9', marginBottom: '16px' }}>{t.guideAccountDesc}</p>
             <div style={{ background: '#F7F1DC', color: '#5C4D26', padding: '14px 18px', borderRadius: '14px', fontSize: '0.8rem', fontWeight: 700, textAlign: 'center' }}>
               {t.guideAccountBanner}
