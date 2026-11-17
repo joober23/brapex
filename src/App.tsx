@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { TRANSLATIONS, Language } from './translations';
+import { GLOSSARY_TERMS, findGlossaryTerm, GlossaryTerm } from './glossary';
 import {
   Globe,
   ArrowRightLeft,
@@ -35,7 +36,15 @@ import {
   ArrowUpRight,
   Lock,
   Compass,
-  Home
+  Home,
+  Ship,
+  Anchor,
+  AlertTriangle,
+  Info,
+  Receipt,
+  Plane,
+  Hash,
+  BookOpen
 } from 'lucide-react';
 
 interface CommodityItem {
@@ -251,6 +260,63 @@ export default function App() {
   // Guia Aduaneiro NCM inline feedback & modais
   const [showNcmInfo, setShowNcmInfo] = useState<boolean>(false);
   const [guideDetailModal, setGuideDetailModal] = useState<{ title: string; desc: string; tips: string[] } | null>(null);
+
+  // Glossário de Siglas (FOB, CIF, NCM, DU-E, DUIMP, Invoice, Packing List, BL/AWB)
+  const [showGlossaryModal, setShowGlossaryModal] = useState<boolean>(false);
+  const [activeSiglaCode, setActiveSiglaCode] = useState<string | null>(null);
+  const [glossarySearch, setGlossarySearch] = useState<string>('');
+
+  const filteredGlossaryTerms = GLOSSARY_TERMS.filter((item) => {
+    if (!glossarySearch.trim()) return true;
+    const q = glossarySearch.toLowerCase().trim();
+    return (
+      item.code.toLowerCase().includes(q) ||
+      item.name.toLowerCase().includes(q) ||
+      item.descPt.toLowerCase().includes(q) ||
+      item.descEs.toLowerCase().includes(q) ||
+      item.tags.some((t) => t.includes(q))
+    );
+  });
+
+  const getGlossaryIcon = (icon: GlossaryTerm['icon']) => {
+    switch (icon) {
+      case 'ship':
+        return <Ship size={20} className="text-emerald-700" />;
+      case 'shield':
+        return <ShieldCheck size={20} className="text-emerald-700" />;
+      case 'hash':
+        return <Hash size={20} className="text-emerald-700" />;
+      case 'upload':
+        return <FileCheck size={20} className="text-emerald-700" />;
+      case 'download':
+        return <UploadCloud size={20} className="text-emerald-700" />;
+      case 'receipt':
+        return <Receipt size={20} className="text-emerald-700" />;
+      case 'package':
+        return <Package size={20} className="text-emerald-700" />;
+      case 'plane':
+        return <Plane size={20} className="text-emerald-700" />;
+      default:
+        return <FileText size={20} className="text-emerald-700" />;
+    }
+  };
+
+  const renderSiglaBadge = (code: string, label?: string) => {
+    return (
+      <button
+        type="button"
+        className="sigla-tag-btn"
+        onClick={(e) => {
+          e.stopPropagation();
+          setActiveSiglaCode(activeSiglaCode === code ? null : code);
+        }}
+        title={`Clique para entender o significado de ${code}`}
+      >
+        <span>{label || code}</span>
+        <span className="sigla-q-mark">?</span>
+      </button>
+    );
+  };
 
   // Chatbot
   const [chatMessages, setChatMessages] = useState<Array<{ sender: 'bot' | 'user'; key?: string; text?: string }>>([
@@ -784,6 +850,181 @@ export default function App() {
         </div>
       )}
 
+      {/* BALÃOZINHO / POPOVER EXPLICATIVO DE SIGLA AO CLICAR EM (?) - SEM SAIR DA TELA */}
+      {activeSiglaCode && (() => {
+        const term = findGlossaryTerm(activeSiglaCode);
+        if (!term) return null;
+        return (
+          <div className="sigla-balloon-popover" onClick={(e) => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div className="glossary-icon-badge">
+                  {getGlossaryIcon(term.icon)}
+                </div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <strong style={{ fontSize: '1.15rem', color: '#111827' }}>{term.code}</strong>
+                    <span style={{ fontSize: '0.68rem', background: '#ECFDF5', color: '#166534', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
+                      {term.category}
+                    </span>
+                  </div>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--primary-green)', fontWeight: 700 }}>
+                    {term.name}
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                className="icon-btn"
+                style={{ width: '32px', height: '32px' }}
+                onClick={() => setActiveSiglaCode(null)}
+                aria-label="Fechar"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <p style={{ fontSize: '0.86rem', color: '#374151', lineHeight: 1.5, margin: '10px 0 16px' }}>
+              {lang === 'es' ? term.descEs : term.descPt}
+            </p>
+
+            <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
+              <button
+                type="button"
+                className="btn-outline"
+                style={{ fontSize: '0.78rem', padding: '6px 12px', gap: '4px' }}
+                onClick={() => {
+                  setActiveSiglaCode(null);
+                  setShowGlossaryModal(true);
+                }}
+              >
+                <Search size={13} />
+                <span>Ver Todas as Siglas</span>
+              </button>
+              <button
+                type="button"
+                className="btn-green"
+                style={{ fontSize: '0.78rem', padding: '6px 14px' }}
+                onClick={() => setActiveSiglaCode(null)}
+              >
+                Entendi
+              </button>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* MODAL: GLOSSÁRIO COMPLETO DE SIGLAS (CONFORME PRINT DO USUÁRIO) */}
+      {showGlossaryModal && (
+        <div className="modal-overlay" onClick={() => setShowGlossaryModal(false)}>
+          <div
+            className="modal-card"
+            style={{ maxWidth: '560px', maxHeight: '88vh', overflowY: 'auto' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+              <div>
+                <span className="eyebrow" style={{ margin: 0 }}>
+                  <HelpCircle size={14} />
+                  <span>GUIA ADUANEIRO</span>
+                </span>
+                <h3 className="serif-title" style={{ fontSize: '1.4rem' }}>{t.glossaryTitle}</h3>
+              </div>
+              <button className="icon-btn" onClick={() => setShowGlossaryModal(false)} aria-label="Fechar">
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Campo de Busca conforme Print */}
+            <div className="form-group" style={{ marginBottom: '12px' }}>
+              <div style={{ position: 'relative' }}>
+                <input
+                  type="text"
+                  placeholder={t.glossarySearchPlaceholder}
+                  value={glossarySearch}
+                  onChange={(e) => setGlossarySearch(e.target.value)}
+                  style={{
+                    paddingLeft: '44px',
+                    fontSize: '0.92rem',
+                    borderRadius: '16px',
+                    border: '1px solid #D5D1C7',
+                    background: '#FFFFFF'
+                  }}
+                />
+                <Search
+                  size={18}
+                  style={{
+                    position: 'absolute',
+                    left: '14px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    color: '#6B7280'
+                  }}
+                />
+                {glossarySearch && (
+                  <button
+                    type="button"
+                    onClick={() => setGlossarySearch('')}
+                    style={{
+                      position: 'absolute',
+                      right: '12px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      color: '#9CA3AF'
+                    }}
+                  >
+                    <X size={16} />
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Contador conforme Print: "8 termos no glossário" */}
+            <div style={{ fontSize: '0.84rem', color: '#6B7280', fontWeight: 600, marginBottom: '14px' }}>
+              {filteredGlossaryTerms.length} {t.glossaryTermsCount}
+            </div>
+
+            {/* Lista de Cards de Siglas conforme Print */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              {filteredGlossaryTerms.map((term) => (
+                <div key={term.code} className="glossary-card">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <strong style={{ fontSize: '1.25rem', color: '#111827', letterSpacing: '0.3px' }}>
+                      {term.code}
+                    </strong>
+                    <div className="glossary-icon-badge">
+                      {getGlossaryIcon(term.icon)}
+                    </div>
+                  </div>
+                  <div style={{ fontSize: '0.82rem', color: 'var(--primary-green)', fontWeight: 700 }}>
+                    {term.name}
+                  </div>
+                  <p style={{ fontSize: '0.85rem', color: '#4B5563', lineHeight: 1.5, margin: 0 }}>
+                    {lang === 'es' ? term.descEs : term.descPt}
+                  </p>
+                </div>
+              ))}
+
+              {filteredGlossaryTerms.length === 0 && (
+                <div style={{ textAlign: 'center', padding: '32px 16px', color: 'var(--text-muted)' }}>
+                  <Search size={32} style={{ margin: '0 auto 8px', opacity: 0.4 }} />
+                  <p>Nenhuma sigla encontrada para "{glossarySearch}".</p>
+                </div>
+              )}
+            </div>
+
+            <div style={{ marginTop: '20px', textAlign: 'center' }}>
+              <button className="btn-outline" style={{ width: '100%' }} onClick={() => setShowGlossaryModal(false)}>
+                {t.glossaryCloseBtn}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* NAVBAR SUPERIOR RESPONSIVA (SEM TEXTOS AO LADO DO LOGO E SEM MENU HAMBÚRGUER) */}
       {currentScreen !== 'screen-login' && (
         <header id="main-navbar" className="navbar">
@@ -793,6 +1034,17 @@ export default function App() {
           </div>
 
           <div className="nav-actions">
+            {/* Botão Glossário de Siglas */}
+            <button
+              className="btn-outline"
+              style={{ padding: '8px 12px', fontSize: '0.8rem', gap: '6px' }}
+              onClick={() => setShowGlossaryModal(true)}
+              title="Abrir Glossário de Siglas (FOB, CIF, NCM...)"
+            >
+              <BookOpen size={14} className="text-emerald-700" />
+              <span className="hidden sm:inline">Glossário</span>
+              <span className="sigla-q-mark" style={{ width: '15px', height: '15px', fontSize: '0.6rem' }}>?</span>
+            </button>
             {/* Live Market Indicator */}
             <div
               style={{
@@ -1527,11 +1779,54 @@ export default function App() {
               </select>
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--bg-mint)', padding: '12px 16px', borderRadius: '14px', fontSize: '0.82rem', flexWrap: 'wrap', gap: '8px' }}>
-                <span><strong>NCM Atribuído:</strong> {getNcmByProductKey(selectedProductKey)}</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <strong>Código NCM:</strong>
+                  {renderSiglaBadge('NCM')}
+                  <span>{getNcmByProductKey(selectedProductKey)}</span>
+                </span>
                 <span style={{ background: '#FFFFFF', padding: '5px 10px', borderRadius: '8px', fontWeight: 800, color: 'var(--primary-green)', border: '1px solid #C8D6CD' }}>
                   Acordo ACE 58
                 </span>
               </div>
+            </div>
+          </div>
+
+          {/* AVISO ALFANDEGÁRIO & PRAZO DE VALIDAÇÃO DE DOCUMENTOS */}
+          <div className="alert-warning-card">
+            <AlertTriangle size={18} style={{ flexShrink: 0, marginTop: '2px', color: '#D97706' }} />
+            <div>
+              <strong style={{ display: 'block', marginBottom: '2px', color: '#92400E' }}>
+                Aviso Oficial da Alfândega (Receita Federal & SUNAT):
+              </strong>
+              <span>{t.customsWarning}</span>
+            </div>
+          </div>
+
+          <div className="alert-warning-card info" style={{ marginTop: '-6px' }}>
+            <Clock size={18} style={{ flexShrink: 0, marginTop: '2px', color: '#2563EB' }} />
+            <div>
+              <strong style={{ display: 'block', marginBottom: '2px', color: '#1E40AF' }}>
+                Prazo de Validação de Documentos:
+              </strong>
+              <span>{t.docsValidationNotice}</span>
+            </div>
+          </div>
+
+          {/* Atalhos Rápidos para Siglas do Processo Aduaneiro */}
+          <div style={{ background: '#FFFFFF', border: '1px solid var(--border-card)', borderRadius: '16px', padding: '14px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', boxShadow: 'var(--shadow-sm)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-dark)' }}>
+              <HelpCircle size={16} className="text-emerald-700" />
+              <span>Dúvidas com as siglas? Clique para ver:</span>
+            </div>
+            <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+              {renderSiglaBadge('Invoice')}
+              {renderSiglaBadge('Packing List')}
+              {renderSiglaBadge('DU-E')}
+              {renderSiglaBadge('DUIMP')}
+              {renderSiglaBadge('BL / AWB')}
+              {renderSiglaBadge('NCM')}
+              {renderSiglaBadge('FOB')}
+              {renderSiglaBadge('CIF')}
             </div>
           </div>
 
@@ -1582,7 +1877,10 @@ export default function App() {
                       {doc1Attached ? <CheckCircle2 size={18} className="text-emerald-700" /> : <UploadCloud size={18} className="text-emerald-800" />}
                     </div>
                     <div style={{ textAlign: 'left' }}>
-                      <strong style={{ fontSize: '0.94rem', display: 'block' }}>{t.doc1Title}</strong>
+                      <strong style={{ fontSize: '0.94rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span>{t.doc1Title}</span>
+                        {renderSiglaBadge('Invoice')}
+                      </strong>
                       <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                         {uploadedFiles[1] || t.docNoFile}
                       </span>
@@ -1619,7 +1917,10 @@ export default function App() {
                       {doc2Attached ? <CheckCircle2 size={18} className="text-emerald-700" /> : <UploadCloud size={18} className="text-emerald-800" />}
                     </div>
                     <div style={{ textAlign: 'left' }}>
-                      <strong style={{ fontSize: '0.94rem', display: 'block' }}>{t.doc2Title}</strong>
+                      <strong style={{ fontSize: '0.94rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span>{t.doc2Title}</span>
+                        {renderSiglaBadge('NCM')}
+                      </strong>
                       <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                         {uploadedFiles[2] || t.docNoFile}
                       </span>
@@ -1740,6 +2041,17 @@ export default function App() {
               </div>
             </div>
 
+            {/* Aviso de Atualização Alfandegária */}
+            <div className="alert-warning-card" style={{ marginBottom: '18px' }}>
+              <AlertTriangle size={18} style={{ flexShrink: 0, marginTop: '2px', color: '#D97706' }} />
+              <div>
+                <strong style={{ display: 'block', marginBottom: '2px', color: '#92400E' }}>
+                  Aviso da Alfândega:
+                </strong>
+                <span>{t.customsWarning}</span>
+              </div>
+            </div>
+
             <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', flexWrap: 'wrap' }}>
               <button
                 className="btn-outline"
@@ -1783,7 +2095,18 @@ export default function App() {
             {paymentMethod !== 'boleto' ? (
               <div className="card" style={{ textAlign: 'center', background: '#FAF9F6', padding: '24px' }}>
                 <span className="eyebrow" style={{ justifyContent: 'center' }}>{t.payPixEyebrow}</span>
-                <h4 style={{ fontSize: '1.2rem', marginBottom: '16px' }}>{t.payPixTitle}</h4>
+                <h4 style={{ fontSize: '1.2rem', marginBottom: '14px' }}>{t.payPixTitle}</h4>
+
+                {/* Mensagem do Pix para o Peru */}
+                <div className="alert-warning-card danger" style={{ textAlign: 'left', margin: '0 0 18px' }}>
+                  <AlertTriangle size={18} style={{ flexShrink: 0, marginTop: '2px', color: '#DC2626' }} />
+                  <div>
+                    <strong style={{ display: 'block', marginBottom: '2px', color: '#991B1B' }}>
+                      Atenção para Operações com o Peru:
+                    </strong>
+                    <span style={{ fontSize: '0.8rem', color: '#7F1D1D' }}>{t.payPixPeruWarning}</span>
+                  </div>
+                </div>
 
                 <div style={{ background: 'white', padding: '18px', borderRadius: '18px', display: 'inline-block', boxShadow: '0 6px 18px rgba(0,0,0,0.06)', marginBottom: '16px' }}>
                   <svg width="160" height="160" viewBox="0 0 100 100" fill="#0D2218">
@@ -2115,16 +2438,57 @@ export default function App() {
             </span>
             <h2 className="serif-title" style={{ fontSize: '1.85rem', marginBottom: '12px' }}>{t.guideTitle}</h2>
 
-            <button className="btn-green" style={{ marginBottom: '14px' }} onClick={() => setShowNcmInfo((v) => !v)}>
-              <FileText size={16} />
-              <span>{t.guideNcmBtn}</span>
-            </button>
+            {/* Aviso da Alfândega */}
+            <div className="alert-warning-card" style={{ marginBottom: '16px' }}>
+              <AlertTriangle size={18} style={{ flexShrink: 0, marginTop: '2px', color: '#D97706' }} />
+              <div>
+                <strong style={{ display: 'block', marginBottom: '2px', color: '#92400E' }}>
+                  Aviso Oficial da Alfândega (Receita Federal & SUNAT):
+                </strong>
+                <span>{t.customsWarning}</span>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '14px' }}>
+              <button className="btn-green" onClick={() => setShowNcmInfo((v) => !v)}>
+                <FileText size={16} />
+                <span>{t.guideNcmBtn}</span>
+              </button>
+
+              <button
+                className="btn-outline"
+                onClick={() => setShowGlossaryModal(true)}
+                title="Abrir Glossário com todas as siglas"
+              >
+                <BookOpen size={16} className="text-emerald-700" />
+                <span>Glossário de Siglas (FOB, CIF, NCM...)</span>
+                <span className="sigla-q-mark">?</span>
+              </button>
+            </div>
 
             {showNcmInfo && (
               <div style={{ background: 'var(--bg-mint)', border: '1px solid var(--primary-green)', padding: '16px', borderRadius: '16px', fontSize: '0.84rem', marginBottom: '16px', lineHeight: 1.55 }}>
                 {t.guideNcmInfo}
               </div>
             )}
+
+            {/* Balão de Siglas Interativo no Guia */}
+            <div style={{ background: '#FFFFFF', border: '1px solid var(--border-card)', borderRadius: '16px', padding: '14px 16px', marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', boxShadow: 'var(--shadow-sm)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-dark)' }}>
+                <HelpCircle size={16} className="text-emerald-700" />
+                <span>Consultar sigla rápida:</span>
+              </div>
+              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                {renderSiglaBadge('FOB')}
+                {renderSiglaBadge('CIF')}
+                {renderSiglaBadge('NCM')}
+                {renderSiglaBadge('DU-E')}
+                {renderSiglaBadge('DUIMP')}
+                {renderSiglaBadge('Invoice')}
+                {renderSiglaBadge('Packing List')}
+                {renderSiglaBadge('BL / AWB')}
+              </div>
+            </div>
 
             <p style={{ fontSize: '0.86rem', color: 'var(--text-muted)' }}>{t.guideSub}</p>
           </div>

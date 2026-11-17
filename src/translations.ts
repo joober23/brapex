@@ -174,6 +174,8 @@ export const TRANSLATIONS = {
     docsDestLabel: 'País / Porto de Destino',
     docsDestDefault: 'Porto de Callao, Peru',
     docsNotice: 'Requisitos orientativos validados conforme acordos bilaterais Brasil-Peru (ACE 58).',
+    customsWarning: 'Aviso Importante: As exigências da alfândega podem sofrer atualizações sem aviso prévio conforme determinações da Receita Federal e Aduana Peruana (SUNAT).',
+    docsValidationNotice: 'Aviso de Análise: A validação dos documentos pode demorar até 5 dias úteis para a equipe da BraPex validar.',
     doc1Title: 'Invoice Comercial (Fatura)',
     doc2Title: 'Certificado de Origem (Mercosul/Peru)',
     doc3Title: 'Certificado de Qualidade / Fitossanitário',
@@ -199,10 +201,19 @@ export const TRANSLATIONS = {
     payPixEyebrow: 'PAGAMENTO PIX INSTANTÂNEO',
     payPixTitle: 'Pague com Pix em segundos',
     payPixDesc: 'Utilize o código Copia e Cola ou escaneie o QR Code no seu aplicativo bancário.',
+    payPixPeruWarning: 'Atenção para Operações com o Peru: Para o Peru não é permitido o pagamento via PIX. O PIX é exclusivo para recolhimento de taxas tributárias dentro do território brasileiro. Pagamentos e liquidações internacionais ao Peru devem ser efetuados via transferência bancária internacional (SWIFT / Câmbio oficial).',
     payCopyBtn: 'Copiar Código Pix',
     payCopiedFeedback: 'Código Pix copiado para a área de transferência!',
     payConfirmSimBtn: 'Confirmar Pagamento Realizado →',
     paySuccessNotice: 'Pagamento confirmado! Acompanhe o rastreamento da sua carga.',
+
+    // Glossário de Siglas
+    glossaryTitle: 'Glossário de Siglas de Comércio Exterior',
+    glossarySub: 'Dúvidas com termos aduaneiros? Clique no (?) ou consulte o significado de cada sigla oficial.',
+    glossarySearchPlaceholder: 'Busque uma sigla ou palavra-chave...',
+    glossaryTermsCount: 'termos no glossário',
+    glossaryOpenBtn: 'Glossário de Siglas (?)',
+    glossaryCloseBtn: 'Fechar',
 
     // Tela 7: Frete
     freightEyebrow: 'LOGÍSTICA & TARIFAÇÃO',
@@ -464,6 +475,8 @@ export const TRANSLATIONS = {
     docsDestLabel: 'País / Puerto de Destino',
     docsDestDefault: 'Puerto del Callao, Perú',
     docsNotice: 'Requisitos orientativos validados según acuerdos bilaterales Brasil-Perú (ACE 58).',
+    customsWarning: 'Aviso Importante: Las exigencias de la aduana pueden sufrir actualizaciones sin previo aviso según normativas de la Receita Federal y Aduana Peruana (SUNAT).',
+    docsValidationNotice: 'Aviso de Análisis: La validación de los documentos puede demorar hasta 5 días hábiles para que el equipo de BraPex valide.',
     doc1Title: 'Factura Comercial (Invoice)',
     doc2Title: 'Certificado de Origen (Mercosur/Perú)',
     doc3Title: 'Certificado de Calidad / Fitosanitario',
@@ -489,10 +502,19 @@ export const TRANSLATIONS = {
     payPixEyebrow: 'PAGO PIX INSTANTÁNEO',
     payPixTitle: 'Pague con Pix en segundos',
     payPixDesc: 'Utilice el código Copia y Pega o escanee el código QR en su aplicación bancaria.',
+    payPixPeruWarning: 'Atención para Operaciones con Perú: Para Perú no se permite el pago mediante PIX. El PIX es válido exclusivamente para liquidación de tasas tributarias dentro de Brasil. Las operaciones comerciales y pagos internacionales desde/hacia Perú deben realizarse mediante transferencia bancaria internacional (SWIFT / Cambio oficial).',
     payCopyBtn: 'Copiar Código Pix',
     payCopiedFeedback: '¡Código Pix copiado al portapapeles!',
     payConfirmSimBtn: 'Confirmar Pago Realizado →',
     paySuccessNotice: '¡Pago confirmado! Siga el rastreo de su carga.',
+
+    // Glossário de Siglas
+    glossaryTitle: 'Glosario de Siglas de Comercio Exterior',
+    glossarySub: '¿Dudas con términos aduaneros? Haga clic en (?) o consulte el significado de cada sigla oficial.',
+    glossarySearchPlaceholder: 'Busque una sigla o palabra clave...',
+    glossaryTermsCount: 'términos en el glosario',
+    glossaryOpenBtn: 'Glosario de Siglas (?)',
+    glossaryCloseBtn: 'Cerrar',
 
     // Tela 7: Frete
     freightEyebrow: 'LOGÍSTICA Y TARIFAS',
