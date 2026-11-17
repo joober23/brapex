@@ -584,8 +584,8 @@ export default function App() {
         <div className="modal-overlay" onClick={() => setShowContactModal(false)}>
           <div className="modal-card" onClick={(e) => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <div className="brand-logo-card" style={{ padding: '4px 10px' }}>
-                <img src="/brapex-logo.png" alt="BRAPEX" className="brand-logo-img" style={{ height: '30px' }} />
+              <div className="brand-logo-wrap" style={{ padding: 0 }}>
+                <img src="/brapex-logo.png" alt="BRAPEX" className="brand-logo-img" style={{ height: '32px' }} />
               </div>
               <button className="icon-btn" onClick={() => setShowContactModal(false)} aria-label="Fechar">
                 <X size={18} />
@@ -787,8 +787,8 @@ export default function App() {
       {/* NAVBAR SUPERIOR RESPONSIVA (SEM TEXTOS AO LADO DO LOGO E SEM MENU HAMBÚRGUER) */}
       {currentScreen !== 'screen-login' && (
         <header id="main-navbar" className="navbar">
-          {/* Logo BRAPEX em Container Adaptativo Bonitinho sem Cortes */}
-          <div className="brand-logo-card" onClick={() => navigate('screen-dashboard')} title="BRAPEX Início">
+          {/* Logo BRAPEX sem borda ou caixa branca ao redor */}
+          <div className="brand-logo-wrap" onClick={() => navigate('screen-dashboard')} title="BRAPEX Início">
             <img src="/brapex-logo.png" alt="BRAPEX" className="brand-logo-img" />
           </div>
 
@@ -869,12 +869,12 @@ export default function App() {
               <span>Portal Oficial • Siscomex & ACE 58</span>
             </div>
 
-            <div className="brand-logo-card" style={{ marginBottom: '16px', padding: '8px 18px', background: '#FFFFFF' }}>
+            <div className="brand-logo-wrap" style={{ marginBottom: '16px' }}>
               <img
                 src="/brapex-logo.png"
                 alt="BRAPEX"
                 className="brand-logo-img"
-                style={{ height: '52px', maxWidth: '180px' }}
+                style={{ height: '52px', maxWidth: '190px' }}
               />
             </div>
 
@@ -968,7 +968,7 @@ export default function App() {
 
       {/* TELA 2: DASHBOARD INICIAL */}
       {currentScreen === 'screen-dashboard' && (
-        <section id="screen-dashboard" className="screen" style={{ background: 'var(--bg-mint)' }}>
+        <section id="screen-dashboard" className="screen">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '12px' }}>
             <div>
               <span className="eyebrow">
@@ -1001,21 +1001,22 @@ export default function App() {
 
           <div className="web-grid-2">
             {/* Inteligência Comercial Destaque */}
-            <div className="card-dark" style={{ cursor: 'pointer' }} onClick={() => navigate('screen-inteligencia')}>
+            <div className="card" style={{ cursor: 'pointer', transition: 'all 0.2s ease' }} onClick={() => navigate('screen-inteligencia')}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
-                  <span className="eyebrow" style={{ color: '#A8BDB2' }}>
+                  <span className="eyebrow" style={{ color: 'var(--primary-green)' }}>
                     <Sparkles size={14} />
                     <span>{t.highlightTag}</span>
                   </span>
-                  <h3 style={{ fontSize: '1.25rem', marginBottom: '8px' }}>{t.intelTitle}</h3>
-                  <p style={{ fontSize: '0.86rem', color: '#D4DFD9', lineHeight: 1.5 }}>{t.intelDesc}</p>
+                  <h3 style={{ fontSize: '1.25rem', marginBottom: '8px', color: 'var(--text-dark)' }}>{t.intelTitle}</h3>
+                  <p style={{ fontSize: '0.86rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>{t.intelDesc}</p>
                 </div>
                 <div style={{
                   width: '38px',
                   height: '38px',
                   borderRadius: '12px',
-                  background: 'rgba(255,255,255,0.14)',
+                  background: '#ECFDF5',
+                  color: 'var(--primary-green)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
@@ -1030,13 +1031,13 @@ export default function App() {
               href="https://comexstat.mdic.gov.br/pt/home"
               target="_blank"
               rel="noopener noreferrer"
-              className="card-dark"
-              style={{ cursor: 'pointer', display: 'block', textDecoration: 'none', color: '#FFFFFF' }}
+              className="card"
+              style={{ cursor: 'pointer', display: 'block', textDecoration: 'none', color: 'inherit', transition: 'all 0.2s ease' }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px', height: '100%' }}>
                 <div style={{
-                  background: '#FFFFFF',
-                  color: 'var(--primary-dark)',
+                  background: '#ECFDF5',
+                  color: 'var(--primary-green)',
                   width: '52px',
                   height: '52px',
                   borderRadius: '16px',
@@ -1044,16 +1045,16 @@ export default function App() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   flexShrink: 0,
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                  boxShadow: 'var(--shadow-sm)'
                 }}>
-                  <Globe size={26} className="text-emerald-800" />
+                  <Globe size={26} className="text-emerald-700" />
                 </div>
                 <div style={{ flex: 1 }}>
-                  <span className="eyebrow" style={{ color: '#A8BDB2', margin: 0 }}>COMÉRCIO EXTERIOR</span>
-                  <h3 style={{ fontSize: '1.15rem', margin: '4px 0 2px' }}>{t.radarTitle}</h3>
-                  <p style={{ fontSize: '0.82rem', color: '#D4DFD9' }}>{t.radarDesc}</p>
+                  <span className="eyebrow" style={{ color: 'var(--primary-green)', margin: 0 }}>COMÉRCIO EXTERIOR</span>
+                  <h3 style={{ fontSize: '1.15rem', margin: '4px 0 2px', color: 'var(--text-dark)' }}>{t.radarTitle}</h3>
+                  <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>{t.radarDesc}</p>
                 </div>
-                <ExternalLink size={18} style={{ opacity: 0.8 }} />
+                <ExternalLink size={18} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
               </div>
             </a>
           </div>
@@ -1272,7 +1273,7 @@ export default function App() {
 
       {/* TELA 3: INTELIGÊNCIA COMERCIAL */}
       {currentScreen === 'screen-inteligencia' && (
-        <section id="screen-inteligencia" className="screen" style={{ background: 'var(--bg-mint)' }}>
+        <section id="screen-inteligencia" className="screen">
           <div className="card">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span className="eyebrow" style={{ margin: 0 }}>
@@ -1396,36 +1397,14 @@ export default function App() {
           {/* Botões de Alternância de Rota conforme Print */}
           <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
             <button
-              className={routePeToItp ? 'btn-primary' : 'btn-outline'}
-              style={{
-                fontSize: '0.88rem',
-                padding: '14px 20px',
-                flex: 1,
-                minWidth: '220px',
-                borderRadius: '16px',
-                background: routePeToItp ? 'var(--primary-dark)' : '#ECE9E1',
-                color: routePeToItp ? '#FFFFFF' : 'var(--text-dark)',
-                border: 'none',
-                fontWeight: 700
-              }}
+              className={`route-btn ${routePeToItp ? 'active' : ''}`}
               onClick={() => setRoutePeToItp(true)}
             >
               <span>De: Peru ➔ Para: Itapetininga</span>
             </button>
 
             <button
-              className={!routePeToItp ? 'btn-primary' : 'btn-outline'}
-              style={{
-                fontSize: '0.88rem',
-                padding: '14px 20px',
-                flex: 1,
-                minWidth: '220px',
-                borderRadius: '16px',
-                background: !routePeToItp ? 'var(--primary-dark)' : '#ECE9E1',
-                color: !routePeToItp ? '#FFFFFF' : 'var(--text-dark)',
-                border: 'none',
-                fontWeight: 700
-              }}
+              className={`route-btn ${!routePeToItp ? 'active' : ''}`}
               onClick={() => setRoutePeToItp(false)}
             >
               <span>De: Itapetininga ➔ Para: Peru</span>
@@ -1436,7 +1415,7 @@ export default function App() {
           <div className="product-card-grid">
             {/* Card Informativo de Fornecedores */}
             <div style={{
-              background: '#FFFFFF',
+              background: '#F6F4ED',
               border: '1px solid var(--border-card)',
               borderRadius: '20px',
               padding: '16px 18px',
@@ -1732,7 +1711,7 @@ export default function App() {
 
       {/* TELA 6: PAGAMENTO DAS TAXAS ADUANEIRAS */}
       {currentScreen === 'screen-pagamento' && (
-        <section id="screen-pagamento" className="screen" style={{ background: 'var(--bg-mint)' }}>
+        <section id="screen-pagamento" className="screen">
           <div style={{ background: 'var(--primary-dark)', color: 'white', padding: '28px', borderRadius: '24px', boxShadow: 'var(--shadow-md)' }}>
             <span className="eyebrow" style={{ color: '#A8BDB2' }}>TAXAS FEDERAIS SISCOMEX</span>
             <h2 style={{ fontSize: '1.55rem', margin: '4px 0 6px', color: '#FFFFFF' }}>{t.payTitle}</h2>
@@ -2210,7 +2189,7 @@ export default function App() {
       {/* TELA 10: PERFIL DO USUÁRIO & IDIOMA */}
       {currentScreen === 'screen-perfil' && (
         <section id="screen-perfil" className="screen" style={{ padding: 0 }}>
-          <div style={{ background: 'var(--bg-mint)', padding: '36px 24px', textAlign: 'center' }}>
+          <div style={{ background: '#F6F4ED', padding: '36px 24px', textAlign: 'center', borderBottom: '1px solid var(--border-light)' }}>
             <div style={{
               width: '76px',
               height: '76px',
@@ -2367,20 +2346,20 @@ export default function App() {
       <footer className="app-footer">
         <div className="app-footer-content">
           <div>
-            <div className="brand-logo-card" style={{ display: 'inline-flex', marginBottom: '8px', padding: '4px 10px' }}>
-              <img src="/brapex-logo.png" alt="BRAPEX" className="brand-logo-img" style={{ height: '26px' }} />
+            <div className="brand-logo-wrap" style={{ display: 'inline-flex', marginBottom: '8px', padding: 0 }}>
+              <img src="/brapex-logo.png" alt="BRAPEX" className="brand-logo-img" style={{ height: '28px' }} />
             </div>
             <p>{t.footerText}</p>
           </div>
-          <div style={{ textAlign: 'left', fontSize: '0.82rem', color: '#D4DFD9' }}>
+          <div style={{ textAlign: 'left', fontSize: '0.82rem', color: 'var(--text-dark)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-              <Phone size={13} className="text-emerald-400" />
-              <span>+55 (15) 99173-7379</span>
+              <Phone size={13} className="text-emerald-700" />
+              <span style={{ fontWeight: 600 }}>+55 (15) 99173-7379</span>
               <span>•</span>
-              <Mail size={13} className="text-emerald-400" />
-              <span>brapeximportaexporta.com.br</span>
+              <Mail size={13} className="text-emerald-700" />
+              <span style={{ fontWeight: 600 }}>brapeximportaexporta.com.br</span>
             </div>
-            <div style={{ marginTop: '6px', fontSize: '0.74rem', color: '#9DB3A6' }}>
+            <div style={{ marginTop: '6px', fontSize: '0.74rem', color: 'var(--text-muted)' }}>
               Corredor Bioceânico • Sudoeste Paulista ⇄ Peru • Portal de Operações 2026
             </div>
           </div>
