@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/brapex-logo.png">
+    <title>BRAPEX — Portal de Operações e Comércio Exterior</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #0D2218;
+            --primary-green: #1F5F43;
+            --accent-emerald: #10B981;
+            --bg-cream: #FBF9F5;
+            --bg-mint: #EDF3EF;
+            --card-bg: #FFFFFF;
+            --text-dark: #0F2319;
+            --text-muted: #53645A;
+            --border-light: #E5E2D9;
+            --badge-orange-bg: #FEF3EB;
+            --badge-orange-text: #C46224;
+            --badge-green-bg: #E8F6EE;
+            --badge-green-text: #19583D;
+            --shadow-sm: 0 1px 3px rgba(13, 34, 24, 0.04);
+            --shadow-md: 0 4px 14px -2px rgba(13, 34, 24, 0.06);
+            --shadow-lg: 0 12px 30px -4px rgba(13, 34, 24, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: #ECE9E1;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .app-shell {
+            width: 100%;
+            max-width: 960px;
+            background-color: var(--bg-cream);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.08);
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .serif-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .eyebrow {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            background: var(--bg-cream);
+            border-bottom: 1px solid var(--border-light);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .brand-logo-card {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 14px;
+            background: #FFFFFF;
+            border-radius: 14px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 8px rgba(13, 34, 24, 0.06);
+            cursor: pointer;
+        }
+
+        .brand-logo-img {
+            height: 36px;
+            width: auto;
+            max-width: 135px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 960px;
+            background: rgba(251, 249, 245, 0.96);
+            backdrop-filter: blur(16px);
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 8px 6px max(8px, env(safe-area-inset-bottom, 8px));
+            box-shadow: 0 -4px 20px rgba(13, 34, 24, 0.08);
+            z-index: 90;
+        }
+
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            background: transparent;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 0.68rem;
+            font-weight: 700;
+            flex: 1;
+        }
+
+        .bottom-nav-item:hover, .bottom-nav-item.active {
+            color: var(--primary-green);
+        }
+
+        .screen {
+            padding: 20px 20px 100px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            flex: 1;
+        }
+
+        .hidden { display: none !important; }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 22px;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        .card-dark {
+            background: var(--primary-dark);
+            color: #FFFFFF;
+            border-radius: 20px;
+            padding: 22px;
+        }
+
+        .card-mint {
+            background: var(--bg-mint);
+            border-radius: 20px;
+            padding: 22px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: var(--primary-dark);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 14px;
+            padding: 16px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: opacity 0.2s;
+        }
+
+        .btn-green {
+            width: 100%;
+            background: var(--primary-green);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 14px;
+            padding: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-outline {
+            flex: 1;
+            background: var(--card-bg);
+            color: var(--primary-dark);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 13px 14px;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            background: #FFFFFF;
+            font-size: 0.92rem;
+            color: var(--text-dark);
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary-green);
+        }
+
+        .login-hero {
+            height: 230px;
+            background: linear-gradient(rgba(15, 28, 22, 0.45), rgba(15, 28, 22, 0.55)),
+                        url('/src/assets/images/brapex_port_hero_1794492624789.jpg') center/cover,
+                        url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80') center/cover;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #FFFFFF;
+        }
+
+        .login-hero h1 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            line-height: 1.3;
+            letter-spacing: 0.5px;
+        }
+
+        .shortcut-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .shortcut-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 18px;
+            padding: 18px 14px;
+            text-align: center;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .shortcut-card h4 {
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+        }
+
+        .shortcut-card p {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            line-height: 1.35;
+        }
+
+        .pill-switch {
+            display: flex;
+            background: #EFF2EF;
+            padding: 4px;
+            border-radius: 14px;
+            gap: 4px;
+            margin-bottom: 16px;
+        }
+
+        .pill-btn {
+            flex: 1;
+            padding: 10px 8px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            background: transparent;
+            color: var(--text-muted);
+        }
+
+        .pill-btn.active {
+            background: #FFFFFF;
+            color: var(--primary-dark);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+
+        .list-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .list-row:last-child { border-bottom: none; }
+        .list-row.selected { background: var(--bg-mint); }
+
+        .map-canvas {
+            background: #F3F2EE;
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            height: 210px;
+            position: relative;
+            overflow: hidden;
+            margin: 14px 0;
+        }
+
+        .map-pin {
+            position: absolute;
+            background: #FFFFFF;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .truck-marker {
+            position: absolute;
+            font-size: 1.5rem;
+            left: 55px;
+            bottom: 45px;
+            transition: left 1.0s ease-in-out, bottom 1.0s ease-in-out;
+        }
+
+        .app-footer {
+            background: var(--primary-dark);
+            color: #FFFFFF;
+            padding: 24px 20px;
+            margin-top: auto;
+        }
+
+        .app-footer h4 {
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .app-footer p {
+            font-size: 0.75rem;
+            color: #C7D1CC;
+            line-height: 1.45;
+        }
+
+        .menu-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+        }
+        .menu-panel {
+            width: 100%;
+            max-width: 440px;
+            background: var(--bg-cream);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-shell">
+
+    <!-- MODAL AJUDA & CONTATO -->
+    <div id="contact-modal" class="menu-overlay hidden" onclick="closeContactModal()" style="display:flex; align-items:center; justify-content:center; padding:20px;">
+        <div class="menu-panel" onclick="event.stopPropagation()" style="border-radius:24px; max-width:480px; height:auto; box-shadow:0 20px 40px rgba(0,0,0,0.2);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <img src="/brapex-logo.png" alt="BRAPEX" style="height:30px; width:auto;">
+                    <strong style="font-size:1.15rem; color:var(--primary-dark);">Ajuda & Contato</strong>
+                </div>
+                <button class="icon-btn" onclick="closeContactModal()">✕</button>
+            </div>
+            <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:16px;">
+                Canais oficiais de atendimento da BRAPEX para operações de comércio exterior no Sudoeste Paulista e Peru.
+            </p>
+            <div style="background:var(--bg-mint); padding:16px; border-radius:16px; margin-bottom:12px;">
+                <span class="eyebrow" style="color:var(--primary-green); margin:0;">TELEFONE & WHATSAPP</span>
+                <div style="font-size:1.15rem; font-weight:800; color:var(--primary-dark); margin:4px 0 10px;">
+                    +55 (15) 99173-7379
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <a href="https://wa.me/5515991737379" target="_blank" rel="noopener noreferrer" class="btn-green" style="text-decoration:none; padding:10px; font-size:0.8rem; flex:1;">💬 WhatsApp</a>
+                    <a href="tel:+5515991737379" class="btn-outline" style="text-decoration:none; padding:10px; font-size:0.8rem;">📞 Ligar</a>
+                </div>
+            </div>
+            <div style="background:#FAF9F6; border:1px solid var(--border-light); padding:14px; border-radius:14px; margin-bottom:16px;">
+                <span class="eyebrow" style="margin:0;">E-MAIL INSTITUCIONAL</span>
+                <div style="font-size:0.92rem; font-weight:700; color:var(--primary-dark); margin:4px 0 8px;">
+                    contato@brapeximportaexporta.com.br
+                </div>
+                <a href="mailto:contato@brapeximportaexporta.com.br" class="btn-outline" style="text-decoration:none; display:flex; justify-content:center; width:100%;">✉️ Enviar E-mail</a>
+            </div>
+            <button class="btn-green" onclick="closeContactModal(); navigate('screen-guia');" style="margin-bottom:8px;">📘 Ver Guia Aduaneiro & Perguntas Frequentes</button>
+            <button class="btn-outline" onclick="closeContactModal();">Fechar</button>
+        </div>
+    </div>
+
+    <!-- MODAL GOV.BR FUNCIONAL -->
+    <div id="gov-modal" class="menu-overlay hidden" onclick="closeGovModal()" style="display:flex; align-items:center; justify-content:center; padding:20px;">
+        <div class="menu-panel" onclick="event.stopPropagation()" style="border-radius:24px; max-width:440px; height:auto; box-shadow:0 20px 40px rgba(0,0,0,0.2);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <div style="width:32px; height:32px; background:#1351B4; border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-weight:900; font-size:0.9rem;">gov</div>
+                    <strong style="font-size:1.1rem; color:#1351B4;">Identificação Gov.br</strong>
+                </div>
+                <button class="icon-btn" onclick="closeGovModal()">✕</button>
+            </div>
+            <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:16px;">
+                Acesse o portal BraPex com sua conta Gov.br integrada.
+            </p>
+            <div class="form-group" style="margin-bottom:16px;">
+                <label>Número do CPF</label>
+                <input type="text" value="254.785.785-67" style="font-weight:600;">
+            </div>
+            <button class="btn-primary" style="background:#1351B4; margin-bottom:10px;" onclick="closeGovModal(); navigate('screen-dashboard');">
+                Entrar com Gov.br
+            </button>
+            <div style="text-align:center; font-size:0.78rem; margin-top:8px;">
+                <a href="https://www.gov.br/pt-br" target="_blank" rel="noopener noreferrer" style="color:#1351B4; text-decoration:none; font-weight:600;">
+                    Acessar portal oficial gov.br (externo) ↗
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="nav-menu" class="menu-overlay hidden" onclick="toggleMenu()">
+        <div class="menu-panel" onclick="event.stopPropagation()">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <strong style="font-size:1.1rem;">Menu BraPex</strong>
+                <button class="icon-btn" onclick="toggleMenu()">✕</button>
+            </div>
+            <button class="btn-outline" style="text-align:left;" onclick="navigate('screen-dashboard')">🏠 Tela Inicial</button>
+            <button class="btn-outline" style="text-align:left;" onclick="navigate('screen-inteligencia')">📊 Inteligência Comercial (Região em Foco)</button>
+            <button class="btn-outline" style="text-align:left;" onclick="navigate('screen-produtos')">📦 Produtos de Exportação & Cotações</button>
+            <button class="btn-outline" style="text-align:left;" onclick="navigate('screen-docs')">📄 Documentação & Fluxo Exportação</button>
+            <button class="btn-outline" style="text-align:left;" onclick="navigate('screen-frete')">🚚 Simulador de Frete</button>
+            <button class="btn-outline" style="text-align:left;" onclick="navigate('screen-rastreamento')">📍 Rastreamento & Suporte Chatbot</button>
+            <button class="btn-outline" style="text-align:left;" onclick="navigate('screen-guia')">📘 Guia Aduaneiro Digital / NCM</button>
+            <button class="btn-outline" style="text-align:left;" onclick="navigate('screen-perfil')">👤 Perfil do Usuário (Gov)</button>
+            <button class="btn-outline" style="text-align:left; color:#A33;" onclick="navigate('screen-login')">🚪 Sair</button>
+        </div>
+    </div>
+
+    <header id="main-navbar" class="navbar hidden">
+        <div class="brand-logo-card" onclick="navigate('screen-dashboard')">
+            <img src="/brapex-logo.png" alt="BRAPEX" class="brand-logo-img">
+        </div>
+        <div class="nav-actions">
+            <button class="btn-outline" style="padding:6px 14px; font-size:0.8rem;" onclick="openContactModal()">📞 Ajuda</button>
+            <button class="icon-btn" title="Perfil do Usuário" onclick="navigate('screen-perfil')">👤</button>
+        </div>
+    </header>
+
+    <!-- TELA 1: ENTRADA / LOGIN -->
+    <section id="screen-login" style="display:flex; flex-direction:column; flex:1;">
+        <div class="login-hero">
+            <img src="/brapex-logo.png" alt="BRAPEX Logo" style="height:52px; width:auto; margin-bottom:12px; filter:drop-shadow(0 4px 10px rgba(0,0,0,0.4));">
+            <h1>BRAPEX: CONECTANDO SUDOESTE PAULISTA AO FUTURO</h1>
+        </div>
+        <div style="padding: 24px; max-width: 580px; margin: -28px auto 0; width: 100%;">
+            <div class="card" style="text-align:center;">
+                <span class="eyebrow">PORTAL DE OPERAÇÕES</span>
+                <h2 class="serif-title" style="font-size:1.65rem; margin-bottom:10px;">Bem-vindo à sua rota de confiança.</h2>
+                <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:22px;">Do pequeno ao grande empreendedor</p>
+                <button class="btn-primary" style="margin-bottom:12px; background:#1351B4;" onclick="openGovModal()">
+                    <span style="font-weight:900; background:white; color:#1351B4; padding:2px 6px; border-radius:4px; font-size:0.75rem;">gov</span> Entrar com o Gov.br
+                </button>
+                <button class="btn-outline" style="width:100%; margin-bottom:14px;" onclick="openContactModal()">
+                    📞 Ajuda & Contato
+                </button>
+                <div style="background:#FAF9F6; border:1px solid var(--border-light); border-radius:14px; padding:12px 14px; font-size:0.78rem; color:var(--text-muted); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                    <span>📱 <strong>+55 (15) 99173-7379</strong></span>
+                    <span>✉️ <strong>brapeximportaexporta.com.br</strong></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TELA 2: DASHBOARD INICIAL -->
+    <section id="screen-dashboard" class="screen hidden" style="background: var(--bg-mint);">
+        <div>
+            <span class="eyebrow">TELA INICIAL</span>
+            <h2 class="serif-title" style="font-size:1.85rem;">Olá, Larissa!</h2>
+        </div>
+
+        <div class="card-dark" style="cursor:pointer;" onclick="navigate('screen-inteligencia')">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                <div>
+                    <span class="eyebrow" style="color:#A8BDB2;">DESTAQUE</span>
+                    <h3 style="font-size:1.1rem; margin-bottom:6px;">Inteligência Comercial</h3>
+                    <p style="font-size:0.8rem; color:#D4DFD9; line-height:1.4;">Veja quais produtos estão sendo mais importados e exportados na sua região.</p>
+                </div>
+                <span style="font-size:1.2rem;">↗</span>
+            </div>
+        </div>
+
+        <div class="card-dark">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <span class="eyebrow" style="color:#A8BDB2; margin:0;">REFERÊNCIA CAMBIAL</span>
+                <span id="fx-badge" style="background:#FFFFFF; color:var(--primary-dark); font-size:0.65rem; font-weight:800; padding:4px 10px; border-radius:20px;">SIMULADO</span>
+            </div>
+            <h3 style="font-size:1.1rem; margin-bottom:4px;">Conversor de Moedas</h3>
+            <p id="fx-subtitle" style="font-size:0.8rem; color:#D4DFD9; margin-bottom:14px;">1 R$ = 0,68 S/. · taxa de referência</p>
+            <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:8px; align-items:end; margin-bottom:12px;">
+                <div>
+                    <span id="fx-label-from" style="display:block; font-size:0.7rem; color:#A8BDB2; margin-bottom:4px; font-weight:600;">Real (R$)</span>
+                    <input type="text" inputmode="decimal" id="input-brl" value="100" oninput="handleBrlInput()" onkeydown="if(event.key==='Enter') converterMoeda()" placeholder="0,00">
+                </div>
+                <button type="button" onclick="inverterMoeda()" title="Inverter moedas" style="background:#EAE7DF; border:none; border-radius:10px; padding:12px 10px; cursor:pointer; font-weight:bold; height:44px;">⇄</button>
+                <div>
+                    <span id="fx-label-to" style="display:block; font-size:0.7rem; color:#A8BDB2; margin-bottom:4px; font-weight:600;">Sol Peruano (S/.)</span>
+                    <input type="text" id="output-pen" value="68,00 S/." readonly style="background:#F4F4F4; font-weight:700;">
+                </div>
+            </div>
+            <button type="button" class="btn-outline" style="width:100%; border:none;" onclick="converterMoeda()">Converter</button>
+            <div id="fx-result-box" class="hidden" style="margin-top:12px; padding:12px 14px; border-radius:12px; background:rgba(230,236,231,0.14); border:1px solid rgba(168,189,178,0.45); font-size:0.84rem; color:#FFFFFF;"></div>
+            <p id="fx-note" style="font-size:0.7rem; color:#A8BDB2; margin-top:10px;">Taxa de referência para demonstração.</p>
+        </div>
+
+        <a href="https://comexstat.mdic.gov.br/pt/home" target="_blank" rel="noopener noreferrer" class="card-dark" style="cursor:pointer; display:block; text-decoration:none; color:#FFFFFF;">
+            <div style="display:flex; align-items:center; gap:14px;">
+                <div style="background:#EAE7DF; color:var(--primary-dark); width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0;">🌐</div>
+                <div style="flex:1;">
+                    <span class="eyebrow" style="color:#A8BDB2;">DESTAQUE</span>
+                    <h3 style="font-size:1rem; margin-bottom:4px;">Radar de Mercado Mundial</h3>
+                    <p style="font-size:0.76rem; color:#D4DFD9;">Consulte o PIB, volume de vendas e demandas de produtos por país.</p>
+                </div>
+                <span>→</span>
+            </div>
+        </a>
+
+        <div class="shortcut-grid">
+            <div class="shortcut-card" onclick="navigate('screen-docs')">
+                <span style="font-size:1.4rem;">📄</span>
+                <h4>Documentação</h4>
+                <p>Consultar documentos necessários para exportação e importação.</p>
+            </div>
+            <div class="shortcut-card" onclick="navigate('screen-rastreamento')">
+                <span style="font-size:1.4rem;">🔍</span>
+                <h4>Rastreamento</h4>
+                <p>Acompanhar o trajeto do seu produto.</p>
+            </div>
+            <div class="shortcut-card" onclick="navigate('screen-guia')">
+                <span style="font-size:1.4rem;">🧾</span>
+                <h4>Consulta NCM</h4>
+                <p>Classificação fiscal e taxas do produto.</p>
+            </div>
+            <div class="shortcut-card" onclick="navigate('screen-produtos')">
+                <span style="font-size:1.4rem;">📦</span>
+                <h4>Cotações & Produtos</h4>
+                <p>Preços em tempo real e fornecedores internacionais.</p>
+            </div>
+            <div class="shortcut-card" onclick="navigate('screen-frete')">
+                <span style="font-size:1.4rem;">🚚</span>
+                <h4>Simular Frete</h4>
+                <p>Calcule o custo e a viabilidade por kg.</p>
+            </div>
+        </div>
+
+        <div class="card-mint" style="border:1px solid #C8D6CD; cursor:pointer;" onclick="navigate('screen-rastreamento')">
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                <span class="eyebrow" style="margin:0;">RASTREAMENTO</span>
+                <span>↗</span>
+            </div>
+            <p style="font-size:0.85rem; font-weight:700; margin-bottom:10px;">🚚 Pedido realizado &nbsp; 🚚 Em rota</p>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:0.78rem;">
+                <div><strong>Lote:</strong> BRP-2026-001</div>
+                <div><strong>Produto:</strong> Madeira</div>
+                <div><strong>Localização:</strong> Em rota para o Peru</div>
+                <div><strong>Chegada:</strong> 5 dias</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TELA 3: INTELIGÊNCIA COMERCIAL -->
+    <section id="screen-inteligencia" class="screen hidden" style="background: var(--bg-mint);">
+        <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="eyebrow" style="margin:0;">INTELIGÊNCIA COMERCIAL</span>
+                <span style="background:#E6F2EB; color:#2B4C3B; font-size:0.65rem; font-weight:700; padding:4px 10px; border-radius:20px;">ATIVO</span>
+            </div>
+            <h2 class="serif-title" style="font-size:1.65rem; margin: 6px 0 16px;">Sua região em foco</h2>
+
+            <div class="pill-switch">
+                <button class="pill-btn active" onclick="setFluxo(this)">Fluxo Brasil (Exportação)</button>
+                <button class="pill-btn" onclick="setFluxo(this)">Fluxo Peru (Importação)</button>
+            </div>
+
+            <div class="form-group">
+                <label>Informe sua cidade e seu país</label>
+                <input type="text" placeholder="Ex.: Itapetininga, Brasil" value="Itapetininga, Brasil">
+            </div>
+
+            <div class="form-group">
+                <label>Pesquisar produtos</label>
+                <input type="text" placeholder="Busque por produto">
+            </div>
+
+            <div style="border:1px solid var(--border-light); border-radius:14px; overflow:hidden; margin-bottom:10px;">
+                <div class="list-row" onclick="this.classList.toggle('selected')"><span>Minério e Adubos Minerais</span><span>+</span></div>
+                <div class="list-row" onclick="this.classList.toggle('selected')"><span>Zinco e Cátodos de Cobre</span><span>+</span></div>
+                <div class="list-row" onclick="this.classList.toggle('selected')"><span>Milho</span><span>+</span></div>
+                <div class="list-row" onclick="this.classList.toggle('selected')"><span>Equipamentos Industriais</span><span>+</span></div>
+            </div>
+            <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:14px;">Selecione um ou mais produtos.</p>
+
+            <button class="btn-green" onclick="navigate('screen-produtos')">Pesquisar</button>
+        </div>
+    </section>
+
+    <!-- TELA 4: PRODUTOS DE EXPORTAÇÃO -->
+    <section id="screen-produtos" class="screen hidden">
+        <div>
+            <span class="eyebrow">PRODUTOS</span>
+            <h2 class="serif-title" style="font-size:1.65rem;">Produtos de Exportação</h2>
+            <p style="font-size:0.85rem; color:var(--text-muted);">Principais mercadorias da região</p>
+        </div>
+
+        <div class="form-group" style="margin:0;">
+            <label>Pesquise um produto</label>
+            <input type="text" placeholder="Pesquise um produto">
+        </div>
+
+        <div style="display:flex; gap:8px;">
+            <button class="btn-primary" style="font-size:0.78rem; padding:12px;">De: Peru → Para: Itapetininga</button>
+            <button class="btn-outline" style="font-size:0.78rem; padding:12px;">De: Itapetininga → Para: Peru</button>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1.1fr; gap:10px;">
+            <div class="card-mint" style="border:1px solid var(--primary-dark); display:flex; flex-direction:column; justify-content:center; cursor:pointer;" onclick="navigate('screen-docs')">
+                <strong style="font-size:0.9rem;">🧱 Ferro / Insumos</strong>
+                <span style="font-size:0.72rem; color:var(--text-muted); margin-top:6px;">Clique para iniciar processo →</span>
+            </div>
+
+            <div class="card" style="padding:14px;">
+                <strong style="font-size:0.82rem; display:block; margin-bottom:4px;">Fornecedores peruanos</strong>
+                <p style="font-size:0.68rem; color:var(--text-muted); margin-bottom:10px;">Preços indicativos, não são cotações ao vivo.</p>
+                
+                <div style="border-bottom:1px solid var(--border-light); padding-bottom:8px; margin-bottom:8px; font-size:0.76rem;">
+                    <strong>Shougang Hierro Perú</strong> 🇵🇪<br>
+                    <span style="color:var(--primary-green); font-weight:700;">US$ 850 / ton</span>
+                </div>
+                <div style="font-size:0.76rem;">
+                    <strong>Empresa Siderúrgica del Perú (SIDERPERU)</strong> 🇵🇪<br>
+                    <span style="color:var(--primary-green); font-weight:700;">US$ 890 / ton</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="shortcut-grid">
+            <div class="card" style="padding:14px; font-weight:600; font-size:0.85rem;">🟠 Cobre</div>
+            <div class="card" style="padding:14px; font-weight:600; font-size:0.85rem;">🧄 Alho Peruano</div>
+            <div class="card" style="padding:14px; font-weight:600; font-size:0.85rem;">🐟 Farinha de Peixe</div>
+        </div>
+    </section>
+
+    <!-- TELA 5: FLUXO DOCUMENTAL E ANEXOS -->
+    <section id="screen-docs" class="screen hidden">
+        <div class="card-dark">
+            <span class="eyebrow" style="color:#A8BDB2;">GESTÃO DE DOCUMENTAÇÃO</span>
+            <h2 class="serif-title" style="font-size:1.55rem; margin-bottom:8px;">Tudo certo antes de seguir viagem.</h2>
+            <p style="font-size:0.8rem; color:#D4DFD9; margin-bottom:16px;">Use este checklist como apoio para estruturar a documentação de uma operação de exportação ou importação.</p>
+            
+            <div style="background:#FFFFFF; color:var(--text-dark); border-radius:16px; padding:16px;">
+                <strong style="font-size:0.9rem; display:block; margin-bottom:10px;">Checklist da operação</strong>
+                <label style="font-size:0.78rem; display:block; margin-bottom:6px;">Qual produto você deseja exportar/importar?</label>
+                <select style="margin-bottom:10px;">
+                    <option>Ferro / Insumos (NCM 7200.00.00)</option>
+                    <option>Cobre</option>
+                    <option>Madeira</option>
+                    <option>Milho</option>
+                </select>
+                <button class="btn-outline" style="width:100%;">Confirmar Produto</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <span class="eyebrow">FLUXO DOCUMENTAL DEMONSTRATIVO</span>
+            <h3 class="serif-title" style="font-size:1.3rem; margin-bottom:8px;">Processo de Exportação — Item: Ferro / Insumos</h3>
+            <span style="background:var(--bg-mint); padding:5px 10px; border-radius:8px; font-size:0.75rem; font-weight:600; display:inline-block; margin-bottom:14px;">Código NCM Vinculado: 7200.00.00</span>
+
+            <div class="form-group">
+                <label>Quantidade para Exportação ou Importação (kg)</label>
+                <input type="number" id="doc-kg" placeholder="Ex: 1000">
+            </div>
+            <div class="form-group">
+                <label>País de Origem do produto</label>
+                <input type="text" value="Brasil">
+            </div>
+            <div class="form-group">
+                <label>País de destino</label>
+                <input type="text" value="Peru">
+            </div>
+
+            <div style="background:#FAF3E3; padding:12px; border-radius:12px; font-size:0.75rem; color:#7A5C20; margin-bottom:14px;">
+                Os requisitos são orientativos e devem ser confirmados com despachante aduaneiro, MAPA ou autoridade competente.
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+                <div class="card" style="padding:14px;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                        <strong style="font-size:0.88rem;">Invoice Comercial</strong>
+                        <span id="badge-1" style="background:var(--badge-orange-bg); color:var(--badge-orange-text); font-size:0.7rem; padding:3px 8px; border-radius:12px; font-weight:600;">Pendente</span>
+                    </div>
+                    <p id="file-1" style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">Nenhum arquivo selecionado</p>
+                    <button class="btn-green" style="width:auto; padding:8px 14px; font-size:0.8rem;" onclick="anexarDoc(1, 'invoice_comercial.pdf')">Anexar arquivo</button>
+                </div>
+
+                <div class="card" style="padding:14px;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                        <strong style="font-size:0.88rem;">Certificado de Origem</strong>
+                        <span id="badge-2" style="background:var(--badge-orange-bg); color:var(--badge-orange-text); font-size:0.7rem; padding:3px 8px; border-radius:12px; font-weight:600;">Pendente</span>
+                    </div>
+                    <p id="file-2" style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">Nenhum arquivo selecionado</p>
+                    <button class="btn-green" style="width:auto; padding:8px 14px; font-size:0.8rem;" onclick="anexarDoc(2, 'certificado_origem.pdf')">Anexar arquivo</button>
+                </div>
+
+                <div class="card" style="padding:14px;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                        <strong style="font-size:0.88rem;">Certificado de Qualidade</strong>
+                        <span id="badge-3" style="background:var(--badge-orange-bg); color:var(--badge-orange-text); font-size:0.7rem; padding:3px 8px; border-radius:12px; font-weight:600;">Pendente</span>
+                    </div>
+                    <p id="file-3" style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">Nenhum arquivo selecionado</p>
+                    <button class="btn-green" style="width:auto; padding:8px 14px; font-size:0.8rem;" onclick="anexarDoc(3, 'certificado_qualidade.pdf')">Anexar arquivo</button>
+                </div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; font-size:0.82rem;">
+                <strong id="doc-counter">0 de 3 documentos anexados</strong>
+                <span id="doc-global-status" style="background:#E6EEF8; color:#2C5E9E; padding:3px 10px; border-radius:12px; font-size:0.72rem; font-weight:600;">Pendente</span>
+            </div>
+
+            <button class="btn-green" onclick="navigate('screen-pagamento')">IR PARA PAGAMENTO (GOV.BR)</button>
+        </div>
+    </section>
+
+    <!-- TELA 6: PAGAMENTO PIX -->
+    <section id="screen-pagamento" class="screen hidden" style="background: var(--bg-mint);">
+        <div class="card-green" style="background:var(--primary-green); color:white; padding:22px; border-radius:20px;">
+            <h2 style="font-size:1.35rem; margin-bottom:6px;">Pagamento</h2>
+            <p style="font-size:0.8rem; opacity:0.9;">Documentos aprovados! Finalize o pagamento para emitir o certificado. A aprovação é apenas demonstrativa e local.</p>
+        </div>
+
+        <div class="card">
+            <h3 style="font-size:1.05rem; margin-bottom:14px;">Resumo do valor</h3>
+            <div style="display:flex; flex-direction:column; gap:10px; font-size:0.88rem; margin-bottom:16px;">
+                <div style="display:flex; justify-content:space-between;"><span style="color:var(--text-muted);">Taxa de Exportação</span><strong>R$ 180,00</strong></div>
+                <div style="display:flex; justify-content:space-between;"><span style="color:var(--text-muted);">Emolumentos GOV</span><strong>R$ 45,00</strong></div>
+                <div style="display:flex; justify-content:space-between;"><span style="color:var(--text-muted);">Taxa de Serviço</span><strong>R$ 20,00</strong></div>
+                <hr style="border:none; border-top:1px solid var(--border-light);">
+                <div style="display:flex; justify-content:space-between; font-size:1rem;"><strong>Total</strong><strong>R$ 245,00</strong></div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
+                <button class="btn-outline" style="text-align:left; border:2px solid var(--primary-dark);">Pix</button>
+                <button class="btn-outline" style="text-align:left;">QR Code</button>
+                <button class="btn-outline" style="text-align:left;">Boleto Bancário</button>
+            </div>
+
+            <div class="card" style="text-align:center; background:#FAF9F6;">
+                <span class="eyebrow">PAGAMENTO PIX</span>
+                <h4 style="font-size:1.1rem; margin-bottom:14px;">Pague com Pix</h4>
+                
+                <div style="background:white; padding:16px; border-radius:16px; display:inline-block; box-shadow:0 2px 10px rgba(0,0,0,0.05); margin-bottom:14px;">
+                    <svg width="140" height="140" viewBox="0 0 100 100" fill="#1A3026">
+                        <rect x="5" y="5" width="25" height="25" fill="none" stroke="#1A3026" stroke-width="5"/>
+                        <rect x="12" y="12" width="11" height="11"/>
+                        <rect x="70" y="5" width="25" height="25" fill="none" stroke="#1A3026" stroke-width="5"/>
+                        <rect x="77" y="12" width="11" height="11"/>
+                        <rect x="5" y="70" width="25" height="25" fill="none" stroke="#1A3026" stroke-width="5"/>
+                        <rect x="12" y="77" width="11" height="11"/>
+                        <rect x="40" y="10" width="8" height="8"/><rect x="52" y="22" width="8" height="8"/>
+                        <rect x="38" y="40" width="12" height="12"/><rect x="58" y="45" width="8" height="16"/>
+                        <rect x="10" y="42" width="14" height="8"/><rect x="42" y="68" width="10" height="10"/>
+                        <rect x="65" y="72" width="20" height="8"/><rect x="75" y="85" width="15" height="8"/>
+                    </svg>
+                </div>
+
+                <div style="font-size:1.25rem; font-weight:700; margin-bottom:4px;">R$ 245,00</div>
+                <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:14px;">Copie o código Pix para concluir o pagamento.</p>
+                <button class="btn-outline" id="btn-copy-pix" style="width:100%;" onclick="copyPix()">Copiar Código Pix</button>
+                <p id="pix-copied-msg" class="hidden" style="font-size:0.76rem; color:var(--primary-green); font-weight:700; margin-top:8px;">✓ Código Pix Copia e Cola copiado!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- TELA 7: SIMULADOR DE FRETE -->
+    <section id="screen-frete" class="screen hidden">
+        <div class="card">
+            <span class="eyebrow">SIMULADOR DE FRETE</span>
+            <h2 class="serif-title" style="font-size:1.65rem; margin-bottom:8px;">Simular Frete</h2>
+            <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:18px;">Informe os dados da sua encomenda para estimar o frete de forma simples e rápida.</p>
+
+            <div class="form-group">
+                <label>Produto</label>
+                <select id="frete-prod">
+                    <option value="">Selecione um produto</option>
+                    <option value="ferro">Ferro / Insumos</option>
+                    <option value="cobre">Cobre</option>
+                    <option value="madeira">Madeira</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Valor do produto (R$)</label>
+                <input type="number" id="frete-valor" placeholder="Ex: 5000">
+            </div>
+            <div class="form-group">
+                <label>Peso (kg)</label>
+                <input type="number" id="frete-peso" placeholder="Ex: 1200">
+            </div>
+            <div class="form-group">
+                <label>País de origem</label>
+                <input type="text" value="Brasil">
+            </div>
+            <div class="form-group">
+                <label>País de destino</label>
+                <input type="text" placeholder="Ex: Peru" value="Peru">
+            </div>
+
+            <button class="btn-green" onclick="calcularFrete()">SIMULAR</button>
+            <div id="frete-resultado" class="hidden" style="margin-top:14px; padding:14px; background:var(--bg-mint); border-radius:12px; font-size:0.85rem;"></div>
+        </div>
+    </section>
+
+    <!-- TELA 8: RASTREAMENTO + CHATBOT -->
+    <section id="screen-rastreamento" class="screen hidden">
+        <div>
+            <span class="eyebrow">RASTREAMENTO EM TEMPO REAL</span>
+            <h2 class="serif-title" style="font-size:1.65rem; margin-bottom:6px;">Visibilidade para cada etapa.</h2>
+            <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:8px;">Consulte uma linha do tempo demonstrativa para acompanhar o percurso de uma carga.</p>
+            <p style="font-size:0.8rem; font-weight:700;">Experimente: BRAPEX2026, BR-PE-001 ou CARGA123.</p>
+        </div>
+
+        <div class="card">
+            <input type="text" id="track-code" placeholder="Digite o código de rastreamento" value="BRAPEX2026" style="margin-bottom:10px;">
+            <button class="btn-green" onclick="animarRota()">Rastrear carga</button>
+        </div>
+
+        <div class="card">
+            <span class="eyebrow">ROTA ILUSTRATIVA</span>
+            <h3 style="font-size:1.1rem; margin-bottom:4px;">Brasil → Peru</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">Acompanhe uma visualização demonstrativa do deslocamento internacional da carga.</p>
+            
+            <button class="btn-green" style="width:auto; padding:10px 18px;" onclick="animarRota()">▷ Animar rota</button>
+
+            <div class="map-canvas">
+                <svg width="100%" height="100%" viewBox="0 0 300 200">
+                    <path d="M 55 155 Q 140 110 235 45" stroke="#1A3026" stroke-width="3" stroke-dasharray="5,5" fill="none"/>
+                </svg>
+                <div class="map-pin" style="top:18px; right:18px; color:#A33;">📍 Destino: Peru</div>
+                <div id="truck-el" class="truck-marker">🚚</div>
+                <div class="map-pin" style="bottom:18px; left:18px; color:#2B4C3B;">📍 Origem: Sudoeste/PR</div>
+                <span id="route-status" style="position:absolute; bottom:12px; right:14px; font-size:0.7rem; color:var(--text-muted);">● Pronto para iniciar</span>
+            </div>
+            <p style="font-size:0.78rem; color:var(--text-muted);">A rota está pronta para animação.</p>
+        </div>
+
+        <div class="card-mint">
+            <span class="eyebrow">SUPORTE CHATBOT</span>
+            <h2 class="serif-title" style="font-size:1.55rem; margin-bottom:8px;">Uma primeira resposta, quando você precisa.</h2>
+            <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:14px;">Converse com nosso assistente demonstrativo sobre documentação, rastreamento, prazos, Peru e alfândega.</p>
+
+            <div class="card" style="padding:14px;">
+                <div id="chat-history" style="background:var(--bg-mint); border-radius:12px; padding:12px; min-height:140px; max-height:220px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; margin-bottom:10px;">
+                    <div style="background:#FFFFFF; padding:10px 12px; border-radius:12px; font-size:0.8rem; line-height:1.4; max-width:85%;">
+                        Olá! Posso ajudar com documentação, rastreamento e logística internacional. Como posso orientar você?
+                    </div>
+                </div>
+                <input type="text" id="chat-msg-input" placeholder="Digite sua pergunta" style="margin-bottom:8px;">
+                <button class="btn-green" onclick="enviarChat()">Enviar</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- TELA 9: GUIA ADUANEIRO DIGITAL -->
+    <section id="screen-guia" class="screen hidden">
+        <div>
+            <span class="eyebrow">GUIA ADUANEIRO DIGITAL</span>
+            <h2 class="serif-title" style="font-size:1.65rem; margin-bottom:12px;">Pesquise antes de movimentar.</h2>
+            <button class="btn-green" style="margin-bottom:12px;" onclick="toggleNcmInfo()">CONSULTAR NCM</button>
+            <div id="ncm-info-box" class="hidden" style="background:var(--bg-mint); border:1px solid var(--primary-green); padding:12px; border-radius:12px; font-size:0.8rem; margin-bottom:12px;">
+                Consulta NCM: Ferro / Insumos — Código 7200.00.00 (Alíquota IPI/II conforme acordo Mercosul-Peru).
+            </div>
+            <p style="font-size:0.82rem; color:var(--text-muted);">Encontre pontos de partida para as dúvidas mais recorrentes de uma operação internacional.</p>
+        </div>
+
+        <div class="form-group" style="margin:0;">
+            <label>Buscar por produto ou assunto</label>
+            <input type="text" placeholder="Ex.: certificado de origem ou alfândega Peru">
+        </div>
+
+        <div class="card" style="padding:16px; cursor:pointer;" onclick="navigate('screen-docs')">
+            <strong style="font-size:0.9rem;">▸ Documentos de exportação</strong>
+            <p style="font-size:0.78rem; color:var(--text-muted); margin-top:4px;">Documentos comerciais e logísticos que estruturam a operação.</p>
+        </div>
+
+        <div class="card" style="padding:16px; cursor:pointer;" onclick="navigate('screen-docs')">
+            <strong style="font-size:0.9rem;">▸ Certificado de origem</strong>
+            <p style="font-size:0.78rem; color:var(--text-muted); margin-top:4px;">Comprovação da origem da mercadoria em condições aplicáveis.</p>
+        </div>
+
+        <div class="card-dark" style="cursor:pointer;" onclick="navigate('screen-perfil')">
+            <span class="eyebrow" style="color:#A8BDB2;">MINHA CONTA</span>
+            <h3 class="serif-title" style="font-size:1.45rem; margin-bottom:6px;">Perfil do Usuário</h3>
+            <p style="font-size:0.8rem; color:#D4DFD9; margin-bottom:14px;">Gerencie seus dados e preferências no aplicativo BraPex.</p>
+            <div style="background:#F7F1DC; color:#5C4D26; padding:10px 14px; border-radius:10px; font-size:0.76rem; font-weight:600; text-align:center;">
+                As informações do perfil são puxadas automaticamente pelo Gov.
+            </div>
+        </div>
+    </section>
+
+    <!-- TELA 10: PERFIL DO USUÁRIO -->
+    <section id="screen-perfil" class="screen hidden" style="padding:0;">
+        <div style="background:var(--bg-mint); padding:28px 20px; text-align:center;">
+            <div style="width:68px; height:68px; background:var(--primary-green); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.4rem; font-weight:700; margin:0 auto 12px;">PA</div>
+            <h3 style="font-size:1.1rem;">Paula Andrades Gomes Oliveira</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted);">paula.andrade@exemplo.com</p>
+        </div>
+
+        <div style="padding:20px; display:flex; flex-direction:column; gap:16px;">
+            <div class="card">
+                <span class="eyebrow" style="margin-bottom:12px;">INFORMAÇÕES PESSOAIS</span>
+                <div class="form-group">
+                    <label>Nome completo</label>
+                    <input type="text" value="Paula Andrades Gomes oliveira">
+                </div>
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" value="paula.andrade@exemplo.com">
+                </div>
+                <div class="form-group">
+                    <label>CPF/CNPJ</label>
+                    <input type="text" value="25478.578.567">
+                </div>
+                <div class="form-group">
+                    <label>Nome da empresa</label>
+                    <input type="text" placeholder="Informe a razão social">
+                </div>
+                <div class="form-group" style="margin:0;">
+                    <label>Localização</label>
+                    <input type="text" value="São Paulo, Brasil">
+                </div>
+            </div>
+
+            <div class="card">
+                <span class="eyebrow" data-i18n="profileQuickEyebrow">ACESSO RÁPIDO</span>
+                <div class="list-row" style="padding:10px 0; cursor:default; flex-wrap:wrap; gap:10px;">
+                    <span data-i18n="profileChangeLang">Alterar idioma</span>
+                    <div style="display:flex; gap:8px;">
+                        <button type="button" id="btn-lang-pt" onclick="setLanguage('pt')" style="padding:8px 14px; border-radius:10px; border:1px solid var(--primary-dark); background:var(--primary-dark); color:#FFFFFF; font-size:0.8rem; font-weight:600; cursor:pointer;">Português</button>
+                        <button type="button" id="btn-lang-es" onclick="setLanguage('es')" style="padding:8px 14px; border-radius:10px; border:1px solid var(--border-light); background:#FFFFFF; color:var(--primary-dark); font-size:0.8rem; font-weight:600; cursor:pointer;">Espanhol</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="app-footer">
+        <h4>BRAPEX</h4>
+        <p data-i18n="footerText">Demonstração interativa de uma experiência BRAPEX. Consulte especialistas para decisões operacionais e aduaneiras.</p>
+    </footer>
+
+    <nav id="main-bottom-nav" class="bottom-nav hidden">
+        <button class="bottom-nav-item" onclick="navigate('screen-dashboard')">
+            <span style="font-size:1.15rem;">🏠</span>
+            <span>Início</span>
+        </button>
+        <button class="bottom-nav-item" onclick="navigate('screen-inteligencia')">
+            <span style="font-size:1.15rem;">📊</span>
+            <span>Radar</span>
+        </button>
+        <button class="bottom-nav-item" onclick="navigate('screen-produtos')">
+            <span style="font-size:1.15rem;">📦</span>
+            <span>Produtos</span>
+        </button>
+        <button class="bottom-nav-item" onclick="navigate('screen-docs')">
+            <span style="font-size:1.15rem;">📄</span>
+            <span>Docs</span>
+        </button>
+        <button class="bottom-nav-item" onclick="navigate('screen-rastreamento')">
+            <span style="font-size:1.15rem;">🚚</span>
+            <span>Rastreio</span>
+        </button>
+        <button class="bottom-nav-item" onclick="navigate('screen-perfil')">
+            <span style="font-size:1.15rem;">👤</span>
+            <span>Perfil</span>
+        </button>
+    </nav>
+
+</div>
+
+<script>
+    let docsAnexados = 0;
+    let brlParaPen = true;
+    let currentLang = 'pt';
+
+    const PT_TO_ES = {
+        'Menu BraPex': 'Menú BraPex',
+        '🏠 Tela Inicial': '🏠 Pantalla de Inicio',
+        '📊 Inteligência Comercial (Região em Foco)': '📊 Inteligencia Comercial (Región en Foco)',
+        '📦 Produtos de Exportação & Cotações': '📦 Productos de Exportación y Cotizaciones',
+        '📄 Documentação & Fluxo Exportação': '📄 Documentación y Flujo de Exportación',
+        '🚚 Simulador de Frete': '🚚 Simulador de Flete',
+        '📍 Rastreamento & Suporte Chatbot': '📍 Rastreo y Soporte Chatbot',
+        '📘 Guia Aduaneiro Digital / NCM': '📘 Guía Aduanera Digital / NCM',
+        '👤 Perfil do Usuário (Gov)': '👤 Perfil de Usuario (Gov)',
+        '🚪 Sair': '🚪 Salir',
+        'Perfil do Usuário': 'Perfil de Usuario',
+        'Menu': 'Menú',
+        'BRAPEX: CONECTANDO SUDOESTE PAULISTA AO FUTURO': 'BRAPEX: CONECTANDO EL SUDOESTE PAULISTA AL FUTURO',
+        'PORTAL DE OPERAÇÕES': 'PORTAL DE OPERACIONES',
+        'Bem-vindo à sua rota de confiança.': 'Bienvenido a su ruta de confianza.',
+        'Do pequeno ao grande empreendedor': 'Del pequeño al gran emprendedor',
+        'Entrar com o Gov': 'Ingresar con Gov',
+        'Ajuda': 'Ayuda',
+        'Contato': 'Contacto',
+        'TELA INICIAL': 'PANTALLA DE INICIO',
+        'Olá, Larissa!': '¡Hola, Larissa!',
+        'DESTAQUE': 'DESTACADO',
+        'Inteligência Comercial': 'Inteligencia Comercial',
+        'Veja quais produtos estão sendo mais importados e exportados na sua região.': 'Vea qué productos están siendo más importados y exportados en su región.',
+        'REFERÊNCIA CAMBIAL': 'REFERENCIA CAMBIARIA',
+        'SIMULADO': 'SIMULADO',
+        'Conversor de Moedas': 'Conversor de Monedas',
+        '1 R$ = 0,68 S/. · taxa simulada de referência': '1 R$ = 0,68 S/. · tasa simulada de referencia',
+        'Converter': 'Convertir',
+        'Taxa simulada para demonstração.': 'Tasa simulada para demostración.',
+        'Radar de Mercado Mundial': 'Radar de Mercado Mundial',
+        'Consulte o PIB, volume de vendas e demandas de produtos por país.': 'Consulte el PIB, volumen de ventas y demandas de productos por país.',
+        'Documentação': 'Documentación',
+        'Consultar documentos necessários para exportação e importação.': 'Consultar documentos necesarios para exportación e importación.',
+        'Rastreamento': 'Rastreo',
+        'Acompanhar o trajeto do seu produto.': 'Seguir el trayecto de su producto.',
+        'Consulta NCM': 'Consulta NCM',
+        'Classificação fiscal e taxas do produto.': 'Clasificación fiscal y tasas del producto.',
+        'Calcule valores entre R$ e S/.': 'Calcule valores entre R$ y S/.',
+        'Simular Frete': 'Simular Flete',
+        'Calcule o custo e a viabilidade por kg.': 'Calcule el costo y la viabilidad por kg.',
+        'RASTREAMENTO': 'RASTREO',
+        '🚚 Pedido realizado   🚚 Em rota': '🚚 Pedido realizado   🚚 En ruta',
+        'Lote:': 'Lote:',
+        'Produto:': 'Producto:',
+        'Madeira': 'Madera',
+        'Localização:': 'Ubicación:',
+        'Em rota para o Peru': 'En ruta hacia Perú',
+        'Chegada:': 'Llegada:',
+        '5 dias': '5 días',
+        'INTELIGÊNCIA COMERCIAL': 'INTELIGENCIA COMERCIAL',
+        'ATIVO': 'ACTIVO',
+        'Sua região em foco': 'Su región en foco',
+        'Fluxo Brasil (Exportação)': 'Flujo Brasil (Exportación)',
+        'Fluxo Peru (Importação)': 'Flujo Perú (Importación)',
+        'Informe sua cidade e seu país': 'Informe su ciudad y su país',
+        'Ex.: Itapetininga, Brasil': 'Ej.: Itapetininga, Brasil',
+        'Pesquisar produtos': 'Buscar productos',
+        'Busque por produto': 'Busque por producto',
+        'Minério e Adubos Minerais': 'Mineral y Abonos Minerales',
+        'Zinco e Cátodos de Cobre': 'Zinc y Cátodos de Cobre',
+        'Milho': 'Maíz',
+        'Equipamentos Industriais': 'Equipos Industriales',
+        'Selecione um ou mais produtos.': 'Seleccione uno o más productos.',
+        'Pesquisar': 'Buscar',
+        'PRODUTOS': 'PRODUCTOS',
+        'Produtos de Exportação': 'Productos de Exportación',
+        'Principais mercadorias da região': 'Principales mercancías de la región',
+        'Pesquise um produto': 'Busque un producto',
+        'De: Peru → Para: Itapetininga': 'De: Perú → Para: Itapetininga',
+        'De: Itapetininga → Para: Peru': 'De: Itapetininga → Para: Perú',
+        '🧱 Ferro / Insumos': '🧱 Hierro / Insumos',
+        'Clique para iniciar processo →': 'Haga clic para iniciar proceso →',
+        'Fornecedores peruanos': 'Proveedores peruanos',
+        'Preços indicativos, não são cotações ao vivo.': 'Precios indicativos, no son cotizaciones en vivo.',
+        '🟠 Cobre': '🟠 Cobre',
+        '🧄 Alho Peruano': '🧄 Ajo Peruano',
+        '🐟 Farinha de Peixe': '🐟 Harina de Pescado',
+        'GESTÃO DE DOCUMENTAÇÃO': 'GESTIÓN DE DOCUMENTACIÓN',
+        'Tudo certo antes de seguir viagem.': 'Todo listo antes de iniciar el viaje.',
+        'Use este checklist como apoio para estruturar a documentação de uma operação de exportação ou importação.': 'Use esta lista de verificación como apoyo para estructurar la documentación de una operación de exportación o importación.',
+        'Checklist da operação': 'Lista de verificación de la operación',
+        'Qual produto você deseja exportar/importar?': '¿Qué producto desea exportar/importar?',
+        'Ferro / Insumos (NCM 7200.00.00)': 'Hierro / Insumos (NCM 7200.00.00)',
+        'Confirmar Produto': 'Confirmar Producto',
+        'FLUXO DOCUMENTAL DEMONSTRATIVO': 'FLUJO DOCUMENTAL DEMOSTRATIVO',
+        'Processo de Exportação — Item: Ferro / Insumos': 'Proceso de Exportación — Ítem: Hierro / Insumos',
+        'Quantidade para Exportação ou Importação (kg)': 'Cantidad para Exportación o Importación (kg)',
+        'Ex: 1000': 'Ej: 1000',
+        'País de Origem do produto': 'País de Origen del producto',
+        'País de destino': 'País de destino',
+        'Os requisitos são orientativos e devem ser confirmados com despachante aduaneiro, MAPA ou autoridade competente.': 'Los requisitos son orientativos y deben confirmarse con un despachante aduanero, MAPA o autoridad competente.',
+        'Invoice Comercial': 'Factura Comercial (Invoice)',
+        'Certificado de Origem': 'Certificado de Origen',
+        'Certificado de Qualidade': 'Certificado de Calidad',
+        'Pendente': 'Pendiente',
+        'Anexado': 'Adjuntado',
+        'Nenhum arquivo selecionado': 'Ningún archivo seleccionado',
+        'Anexar arquivo': 'Adjuntar archivo',
+        '0 de 3 documentos anexados': '0 de 3 documentos adjuntados',
+        '1 de 3 documentos anexados': '1 de 3 documentos adjuntados',
+        '2 de 3 documentos anexados': '2 de 3 documentos adjuntados',
+        '3 de 3 documentos anexados': '3 de 3 documentos adjuntados',
+        'Concluído': 'Completado',
+        'IR PARA PAGAMENTO (GOV.BR)': 'IR A PAGO (GOV.BR)',
+        'Pagamento': 'Pago',
+        'Documentos aprovados! Finalize o pagamento para emitir o certificado. A aprovação é apenas demonstrativa e local.': '¡Documentos aprobados! Finalice el pago para emitir el certificado. La aprobación es solo demostrativa y local.',
+        'Resumo do valor': 'Resumen del valor',
+        'Taxa de Exportação': 'Tasa de Exportación',
+        'Taxa de Serviço': 'Tasa de Servicio',
+        'Boleto Bancário': 'Boleto Bancario',
+        'PAGAMENTO PIX': 'PAGO PIX',
+        'Pague com Pix': 'Pague con Pix',
+        'Copie o código Pix para concluir o pagamento.': 'Copie el código Pix para concluir el pago.',
+        '✓ Código Pix Copia e Cola copiado!': '✓ ¡Código Pix Copia y Pega copiado!',
+        'SIMULADOR DE FRETE': 'SIMULADOR DE FLETE',
+        'Informe os dados da sua encomenda para estimar o frete de forma simples e rápida.': 'Ingrese los datos de su envío para estimar el flete de forma simple y rápida.',
+        'Produto': 'Producto',
+        'Selecione um produto': 'Seleccione un producto',
+        'Ferro / Insumos': 'Hierro / Insumos',
+        'Valor do produto (R$)': 'Valor del producto (R$)',
+        'Ex: 5000': 'Ej: 5000',
+        'Peso (kg)': 'Peso (kg)',
+        'Ex: 1200': 'Ej: 1200',
+        'País de origem': 'País de origen',
+        'Ex: Peru': 'Ej: Perú',
+        'RASTREAMENTO EM TEMPO REAL': 'RASTREO EN TIEMPO REAL',
+        'Visibilidade para cada etapa.': 'Visibilidad en cada etapa.',
+        'Consulte uma linha do tempo demonstrativa para acompanhar o percurso de uma carga.': 'Consulte una línea de tiempo demostrativa para seguir el recorrido de una carga.',
+        'Experimente: BRAPEX2026, BR-PE-001 ou CARGA123.': 'Pruebe: BRAPEX2026, BR-PE-001 o CARGA123.',
+        'Digite o código de rastreamento': 'Ingrese el código de rastreo',
+        'Rastrear carga': 'Rastrear carga',
+        'ROTA ILUSTRATIVA': 'RUTA ILUSTRATIVA',
+        'Brasil → Peru': 'Brasil → Perú',
+        'Acompanhe uma visualização demonstrativa do deslocamento internacional da carga.': 'Siga una visualización demostrativa del desplazamiento internacional de la carga.',
+        '▷ Animar rota': '▷ Animar ruta',
+        '📍 Destino: Peru': '📍 Destino: Perú',
+        '📍 Origem: Sudoeste/PR': '📍 Origen: Sudoeste/SP',
+        '● Pronto para iniciar': '● Listo para iniciar',
+        '● Em trânsito...': '● En tránsito...',
+        '● Chegada ao destino (Peru)': '● Llegada al destino (Perú)',
+        'A rota está pronta para animação.': 'La ruta está lista para animación.',
+        'SUPORTE CHATBOT': 'SOPORTE CHATBOT',
+        'Uma primeira resposta, quando você precisa.': 'Una primera respuesta, cuando la necesita.',
+        'Converse com nosso assistente demonstrativo sobre documentação, rastreamento, prazos, Peru e alfândega.': 'Converse con nuestro asistente demostrativo sobre documentación, rastreo, plazos, Perú y aduana.',
+        'Olá! Posso ajudar com documentação, rastreamento e logística internacional. Como posso orientar você?': '¡Hola! Puedo ayudar con documentación, rastreo y logística internacional. ¿Cómo puedo orientarle?',
+        'Digite sua pergunta': 'Escriba su pregunta',
+        'Enviar': 'Enviar',
+        'GUIA ADUANEIRO DIGITAL': 'GUÍA ADUANERA DIGITAL',
+        'Pesquise antes de movimentar.': 'Investigue antes de movilizar.',
+        'Consulta NCM: Ferro / Insumos — Código 7200.00.00 (Alíquota IPI/II conforme acordo Mercosul-Peru).': 'Consulta NCM: Hierro / Insumos — Código 7200.00.00 (Alícuota IPI/II según acuerdo Mercosur-Perú).',
+        'Encontre pontos de partida para as dúvidas mais recorrentes de uma operação internacional.': 'Encuentre puntos de partida para las dudas más frecuentes de una operación internacional.',
+        'Buscar por produto ou assunto': 'Buscar por producto o tema',
+        'Ex.: certificado de origem ou alfândega Peru': 'Ej.: certificado de origen o aduana Perú',
+        '▸ Documentos de exportação': '▸ Documentos de exportación',
+        'Documentos comerciais e logísticos que estruturam a operação.': 'Documentos comerciales y logísticos que estructuran la operación.',
+        '▸ Certificado de origem': '▸ Certificado de origen',
+        'Comprovação da origem da mercadoria em condições aplicáveis.': 'Comprobación del origen de la mercancía en condiciones aplicables.',
+        'MINHA CONTA': 'MI CUENTA',
+        'Gerencie seus dados e preferências no aplicativo BraPex.': 'Gestione sus datos y preferencias en la aplicación BraPex.',
+        'As informações do perfil são puxadas automaticamente pelo Gov.': 'La información del perfil se obtiene automáticamente desde Gov.',
+        'INFORMAÇÕES PESSOAIS': 'INFORMACIÓN PERSONAL',
+        'Nome completo': 'Nombre completo',
+        'E-mail': 'Correo electrónico',
+        'Nome da empresa': 'Nombre de la empresa',
+        'Informe a razão social': 'Ingrese la razón social',
+        'Localização': 'Ubicación',
+        'ACESSO RÁPIDO': 'ACCESO RÁPIDO',
+        'Alterar idioma': 'Cambiar idioma',
+        'Inverter moedas': 'Invertir monedas',
+        'Demonstração interativa de uma experiência BRAPEX. Consulte especialistas para decisões operacionais e aduaneiras.': 'Demostración interactiva de una experiencia BRAPEX. Consulte a especialistas para decisiones operativas y aduaneras.'
+    };
+
+    const ES_TO_PT = {};
+    Object.keys(PT_TO_ES).forEach((k) => { ES_TO_PT[PT_TO_ES[k]] = k; });
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'es';
+        const dict = lang === 'es' ? PT_TO_ES : ES_TO_PT;
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+        let node;
+        while ((node = walker.nextNode())) {
+            const raw = node.nodeValue;
+            const normalized = raw.replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+            const trimmed = raw.replace(/\u00a0/g, ' ').trim();
+            if (trimmed && dict[trimmed]) {
+                node.nodeValue = raw.replace(raw.trim(), dict[trimmed]);
+            } else if (normalized && dict[normalized]) {
+                node.nodeValue = raw.replace(raw.trim(), dict[normalized]);
+            }
+        }
+        document.querySelectorAll('input[placeholder], textarea[placeholder]').forEach((el) => {
+            const ph = el.getAttribute('placeholder');
+            if (ph && dict[ph]) el.setAttribute('placeholder', dict[ph]);
+        });
+        document.querySelectorAll('[title]').forEach((el) => {
+            const title = el.getAttribute('title');
+            if (title && dict[title]) el.setAttribute('title', dict[title]);
+        });
+        const btnPt = document.getElementById('btn-lang-pt');
+        const btnEs = document.getElementById('btn-lang-es');
+        if (btnPt && btnEs) {
+            btnPt.style.background = lang === 'pt' ? 'var(--primary-dark)' : '#FFFFFF';
+            btnPt.style.color = lang === 'pt' ? '#FFFFFF' : 'var(--primary-dark)';
+            btnPt.style.borderColor = lang === 'pt' ? 'var(--primary-dark)' : 'var(--border-light)';
+            btnEs.style.background = lang === 'es' ? 'var(--primary-dark)' : '#FFFFFF';
+            btnEs.style.color = lang === 'es' ? '#FFFFFF' : 'var(--primary-dark)';
+            btnEs.style.borderColor = lang === 'es' ? 'var(--primary-dark)' : 'var(--border-light)';
+        }
+        if (typeof updateFxTexts === 'function') {
+            updateFxTexts();
+            const box = document.getElementById('fx-result-box');
+            if (box && !box.classList.contains('hidden')) {
+                converterMoeda();
+            }
+        }
+    }
+
+    function toggleNcmInfo() {
+        const box = document.getElementById('ncm-info-box');
+        if (box) box.classList.toggle('hidden');
+    }
+
+    function copyPix() {
+        const pixCode = '00020126580014br.gov.bcb.pix0136brapex-receita-gov@tesouro.gov.br5204000053039865406245.005802BR5925BRAPEX LOGISTICA ITAPETI6009SAO PAULO62140510BRAPEX2026';
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(pixCode).catch(() => {});
+        }
+        const msg = document.getElementById('pix-copied-msg');
+        if (msg) {
+            msg.classList.remove('hidden');
+            setTimeout(() => msg.classList.add('hidden'), 3000);
+        }
+    }
+
+    function navigate(screenId) {
+        document.querySelectorAll('.app-shell > section').forEach(sec => sec.classList.add('hidden'));
+        document.getElementById(screenId).classList.remove('hidden');
+        const menu = document.getElementById('nav-menu');
+        if (menu) menu.classList.add('hidden');
+
+        const navbar = document.getElementById('main-navbar');
+        const bottomNav = document.getElementById('main-bottom-nav');
+        if (screenId === 'screen-login') {
+            if (navbar) navbar.classList.add('hidden');
+            if (bottomNav) bottomNav.classList.add('hidden');
+        } else {
+            if (navbar) navbar.classList.remove('hidden');
+            if (bottomNav) bottomNav.classList.remove('hidden');
+        }
+        window.scrollTo(0, 0);
+    }
+
+    function toggleMenu() {
+        document.getElementById('nav-menu').classList.toggle('hidden');
+    }
+
+    let fxRate = 0.68;
+    let fxIsLive = false;
+
+    function parseCurrencyAmount(raw) {
+        const cleaned = String(raw || '').trim().replace(/[^\d.,]/g, '');
+        if (!cleaned) return 0;
+        if (cleaned.includes(',') && cleaned.includes('.')) {
+            if (cleaned.lastIndexOf(',') > cleaned.lastIndexOf('.')) {
+                return parseFloat(cleaned.replace(/\./g, '').replace(',', '.')) || 0;
+            }
+            return parseFloat(cleaned.replace(/,/g, '')) || 0;
+        }
+        if (cleaned.includes(',')) {
+            return parseFloat(cleaned.replace(',', '.')) || 0;
+        }
+        return parseFloat(cleaned) || 0;
+    }
+
+    function formatBrNumber(num, decimals) {
+        const d = typeof decimals === 'number' ? decimals : 2;
+        return num.toLocaleString('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d });
+    }
+
+    function formatFxOutput(val) {
+        return brlParaPen ? formatBrNumber(val * fxRate, 2) + ' S/.' : 'R$ ' + formatBrNumber(val / fxRate, 2);
+    }
+
+    function updateFxTexts() {
+        const badge = document.getElementById('fx-badge');
+        const sub = document.getElementById('fx-subtitle');
+        const fromLbl = document.getElementById('fx-label-from');
+        const toLbl = document.getElementById('fx-label-to');
+        const note = document.getElementById('fx-note');
+        const dec = fxIsLive ? 4 : 2;
+        if (badge) {
+            badge.innerText = fxIsLive ? (currentLang === 'es' ? 'ACTUALIZADO' : 'ATUALIZADO') : 'SIMULADO';
+        }
+        if (sub) {
+            const pair = brlParaPen
+                ? '1 R$ = ' + formatBrNumber(fxRate, dec) + ' S/.'
+                : '1 S/. = R$ ' + formatBrNumber(1 / fxRate, dec);
+            const desc = fxIsLive
+                ? (currentLang === 'es' ? 'cotización de mercado' : 'cotação de mercado')
+                : (currentLang === 'es' ? 'tasa de referencia' : 'taxa de referência');
+            sub.innerText = pair + ' · ' + desc;
+        }
+        if (fromLbl && toLbl) {
+            fromLbl.innerText = brlParaPen ? 'Real (R$)' : 'Sol Peruano (S/.)';
+            toLbl.innerText = brlParaPen ? 'Sol Peruano (S/.)' : 'Real (R$)';
+        }
+        if (note) {
+            note.innerText = fxIsLive
+                ? (currentLang === 'es' ? 'Cotización actualizada en tiempo real (BRL ↔ PEN).' : 'Cotação atualizada em tempo real (BRL ↔ PEN).')
+                : (currentLang === 'es' ? 'Tasa de referencia para demostración.' : 'Taxa de referência para demonstração.');
+        }
+    }
+
+    function handleBrlInput() {
+        const val = parseCurrencyAmount(document.getElementById('input-brl').value);
+        document.getElementById('output-pen').value = formatFxOutput(val);
+        const box = document.getElementById('fx-result-box');
+        if (box && !box.classList.contains('hidden')) {
+            converterMoeda();
+        }
+    }
+
+    function converterMoeda() {
+        const val = parseCurrencyAmount(document.getElementById('input-brl').value);
+        const box = document.getElementById('fx-result-box');
+        if (val <= 0) {
+            document.getElementById('output-pen').value = brlParaPen ? '0,00 S/.' : 'R$ 0,00';
+            if (box) {
+                box.classList.remove('hidden');
+                box.style.background = 'rgba(253,240,230,0.14)';
+                box.style.borderColor = 'rgba(255,190,140,0.45)';
+                box.innerHTML = '<span style="color:#FFD8B8; font-size:0.78rem; font-weight:600;">' +
+                    (currentLang === 'es' ? 'Ingrese un monto mayor que cero para convertir.' : 'Informe um valor maior que zero para converter.') +
+                    '</span>';
+            }
+            return;
+        }
+        const out = formatFxOutput(val);
+        document.getElementById('output-pen').value = out;
+        if (box) {
+            const fromText = brlParaPen ? 'R$ ' + formatBrNumber(val, 2) : 'S/. ' + formatBrNumber(val, 2);
+            const label = brlParaPen
+                ? (currentLang === 'es' ? 'Convertido a Sol Peruano:' : 'Convertido para Sol Peruano:')
+                : (currentLang === 'es' ? 'Convertido a Real:' : 'Convertido para Real:');
+            box.classList.remove('hidden');
+            box.style.background = 'rgba(230,236,231,0.14)';
+            box.style.borderColor = 'rgba(168,189,178,0.45)';
+            box.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">' +
+                '<span style="color:#D4DFD9; font-size:0.76rem;">' + label + '</span>' +
+                '<strong style="font-size:0.96rem; color:#FFFFFF;">' + fromText + ' = ' + out + '</strong></div>';
+        }
+    }
+
+    function inverterMoeda() {
+        brlParaPen = !brlParaPen;
+        updateFxTexts();
+        const val = parseCurrencyAmount(document.getElementById('input-brl').value);
+        document.getElementById('output-pen').value = formatFxOutput(val);
+        const box = document.getElementById('fx-result-box');
+        if (box && !box.classList.contains('hidden')) {
+            converterMoeda();
+        }
+    }
+
+    (function loadLiveFxRate() {
+        fetch('https://open.er-api.com/v6/latest/BRL')
+            .then(r => r.ok ? r.json() : null)
+            .then(d => {
+                const pen = Number(d && d.rates && d.rates.PEN);
+                if (Number.isFinite(pen) && pen > 0) {
+                    fxRate = pen;
+                    fxIsLive = true;
+                    updateFxTexts();
+                    handleBrlInput();
+                    return true;
+                }
+                return false;
+            })
+            .catch(() => false)
+            .then(ok => {
+                if (ok) return;
+                return fetch('https://economia.awesomeapi.com.br/json/last/BRL-PEN')
+                    .then(r => r.ok ? r.json() : null)
+                    .then(d => {
+                        const pen2 = Number(d && d.BRLPEN && d.BRLPEN.bid);
+                        if (Number.isFinite(pen2) && pen2 > 0) {
+                            fxRate = pen2;
+                            fxIsLive = true;
+                            updateFxTexts();
+                            handleBrlInput();
+                        }
+                    })
+                    .catch(() => {});
+            });
+    })();
+
+    function setFluxo(btn) {
+        btn.parentElement.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    function anexarDoc(num, nomeArquivo) {
+        const fileEl = document.getElementById('file-' + num);
+        const badgeEl = document.getElementById('badge-' + num);
+        if (fileEl.innerText === 'Nenhum arquivo selecionado' || fileEl.innerText === 'Ningún archivo seleccionado') {
+            fileEl.innerText = nomeArquivo;
+            badgeEl.innerText = currentLang === 'es' ? 'Adjuntado' : 'Anexado';
+            badgeEl.style.background = '#E6F2EB';
+            badgeEl.style.color = '#2B4C3B';
+            docsAnexados++;
+            document.getElementById('doc-counter').innerText = docsAnexados + (currentLang === 'es' ? ' de 3 documentos adjuntados' : ' de 3 documentos anexados');
+            if (docsAnexados === 3) {
+                const glob = document.getElementById('doc-global-status');
+                glob.innerText = currentLang === 'es' ? 'Completado' : 'Concluído';
+                glob.style.background = '#E6F2EB';
+                glob.style.color = '#2B4C3B';
+            }
+        }
+    }
+
+    function calcularFrete() {
+        const peso = parseFloat(document.getElementById('frete-peso').value) || 0;
+        const res = document.getElementById('frete-resultado');
+        if (peso <= 0) {
+            res.classList.remove('hidden');
+            res.style.background = '#FDF0E6';
+            res.style.color = '#C66A2C';
+            res.innerHTML = `<strong>${currentLang === 'es' ? 'Ingrese el peso del envío.' : 'Informe o peso da encomenda.'}</strong>`;
+            return;
+        }
+        const estimativa = (peso * 1.45 + 320).toFixed(2).replace('.', ',');
+        res.classList.remove('hidden');
+        res.style.background = 'var(--bg-mint)';
+        res.style.color = 'inherit';
+        if (currentLang === 'es') {
+            res.innerHTML = `<strong>Estimación de Flete Internacional:</strong> R$ ${estimativa} <br><span style="font-size:0.75rem; color:#5C6660;">Plazo estimado: 5 a 7 días hábiles (Modal Carretero/Aduanero).</span>`;
+        } else {
+            res.innerHTML = `<strong>Estimativa de Frete Internacional:</strong> R$ ${estimativa} <br><span style="font-size:0.75rem; color:#5C6660;">Prazo estimado: 5 a 7 dias úteis (Modal Rodoviário/Aduaneiro).</span>`;
+        }
+    }
+
+    function animarRota() {
+        const truck = document.getElementById('truck-el');
+        const status = document.getElementById('route-status');
+        truck.style.left = '55px';
+        truck.style.bottom = '45px';
+        status.innerText = currentLang === 'es' ? '● En tránsito...' : '● Em trânsito...';
+        setTimeout(() => {
+            truck.style.left = '215px';
+            truck.style.bottom = '135px';
+        }, 100);
+        setTimeout(() => {
+            status.innerText = currentLang === 'es' ? '● Llegada al destino (Perú)' : '● Chegada ao destino (Peru)';
+        }, 1100);
+    }
+
+    function enviarChat() {
+        const input = document.getElementById('chat-msg-input');
+        const history = document.getElementById('chat-history');
+        if (!input.value.trim()) return;
+
+        const userBubble = document.createElement('div');
+        userBubble.style.cssText = 'background:#1A3026; color:white; padding:10px 12px; border-radius:12px; font-size:0.8rem; align-self:flex-end; max-width:85%;';
+        userBubble.innerText = input.value;
+        history.appendChild(userBubble);
+
+        input.value = '';
+        history.scrollTop = history.scrollHeight;
+
+        setTimeout(() => {
+            const botBubble = document.createElement('div');
+            botBubble.style.cssText = 'background:#FFFFFF; padding:10px 12px; border-radius:12px; font-size:0.8rem; max-width:85%;';
+            botBubble.innerText = currentLang === 'es'
+                ? 'Para operaciones entre el Sudoeste Paulista y Perú, llame o escriba a nuestro WhatsApp +55 (15) 99173-7379 ou correo contato@brapeximportaexporta.com.br.'
+                : 'Para operações entre o Sudoeste Paulista e o Peru, fale conosco pelo WhatsApp +55 (15) 99173-7379 ou e-mail contato@brapeximportaexporta.com.br.';
+            history.appendChild(botBubble);
+            history.scrollTop = history.scrollHeight;
+        }, 400);
+    }
+
+    function openContactModal() {
+        document.getElementById('contact-modal').classList.remove('hidden');
+    }
+    function closeContactModal() {
+        document.getElementById('contact-modal').classList.add('hidden');
+    }
+
+    function openGovModal() {
+        document.getElementById('gov-modal').classList.remove('hidden');
+    }
+    function closeGovModal() {
+        document.getElementById('gov-modal').classList.add('hidden');
+    }
+
+    // Auto Market Fluctuation Engine
+    setInterval(() => {
+        const delta = (Math.random() - 0.48) * 0.006;
+        fxRate = Math.max(0.58, Math.min(0.72, fxRate + delta));
+        updateFxTexts();
+        const inputVal = parseCurrencyAmount(document.getElementById('input-brl').value);
+        if (inputVal > 0) {
+            document.getElementById('output-pen').value = formatFxOutput(inputVal);
+        }
+    }, 9000);
+</script>
+
+</body>
+</html>
