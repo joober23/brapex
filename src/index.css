@@ -867,22 +867,22 @@ input::placeholder {
     flex-shrink: 0;
 }
 
-.fintech-amount-input {
-    background: transparent;
-    border: none;
+.fintech-amount-input,
+input.fintech-amount-input,
+input.fintech-amount-input:focus,
+input.fintech-amount-input:active {
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    color: #FFFFFF !important;
+    text-align: right;
+    caret-color: #FBBF24 !important;
     font-size: 1.55rem;
     font-weight: 800;
-    color: #FFFFFF;
-    text-align: right;
     width: 100%;
     padding: 0;
-    box-shadow: none;
     font-variant-numeric: tabular-nums;
-}
-
-.fintech-amount-input:focus {
-    box-shadow: none;
-    border: none;
 }
 
 /* File Upload Card Modern */
@@ -1154,4 +1154,112 @@ input::placeholder {
         padding: 4px 6px;
         font-size: 0.65rem;
     }
+}
+
+/* ==========================================================================
+   TEMA PERU (Vermelho & Branco Peruano) - Ativado quando o idioma é Espanhol
+   ========================================================================== */
+[data-theme="pe"],
+.theme-peru {
+    /* Paleta Institucional Peruana */
+    --primary-dark: #380C12;
+    --primary-forest: #58121C;
+    --primary-green: #C8102E;
+    --accent-emerald: #DC2626;
+    --accent-emerald-light: #FEF2F2;
+    --border-focus: #C8102E;
+    --badge-green-bg: #FEF2F2;
+    --badge-green-text: #991B1B;
+}
+
+[data-theme="pe"] .btn-green {
+    background: #C8102E !important;
+    color: #FFFFFF !important;
+}
+
+[data-theme="pe"] .btn-green:hover {
+    background: #A60D26 !important;
+}
+
+[data-theme="pe"] .route-btn.active {
+    background: #380C12 !important;
+    border-color: #380C12 !important;
+    box-shadow: 0 4px 14px rgba(56, 12, 18, 0.25) !important;
+}
+
+[data-theme="pe"] .bottom-nav-item.active {
+    color: #C8102E !important;
+    background: #FEF2F2 !important;
+}
+
+[data-theme="pe"] .bottom-nav-item:hover {
+    color: #C8102E !important;
+}
+
+[data-theme="pe"] .live-dot {
+    background: #DC2626 !important;
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7) !important;
+}
+
+[data-theme="pe"] .card-dark {
+    background: linear-gradient(135deg, #260A0E 0%, #3B1218 100%) !important;
+    box-shadow: 0 8px 24px -4px rgba(38, 10, 14, 0.25) !important;
+}
+
+[data-theme="pe"] .card-dark::before {
+    background: radial-gradient(circle, rgba(200, 16, 46, 0.16) 0%, transparent 70%) !important;
+}
+
+[data-theme="pe"] .product-thumb-card:hover {
+    border-color: #C8102E !important;
+}
+
+[data-theme="pe"] .product-thumb-card.selected {
+    background: #FEF2F2 !important;
+    border-color: #C8102E !important;
+    box-shadow: 0 0 0 2px #C8102E !important;
+}
+
+[data-theme="pe"] .stepper-step.active::after {
+    background: #C8102E !important;
+}
+
+[data-theme="pe"] .stepper-step.completed::after {
+    background: #EF4444 !important;
+}
+
+[data-theme="pe"] .glossary-icon-badge {
+    background: #FEF2F2 !important;
+    color: #C8102E !important;
+}
+
+[data-theme="pe"] .sigla-tag-btn {
+    background: rgba(200, 16, 46, 0.08) !important;
+    color: #380C12 !important;
+    border-color: rgba(200, 16, 46, 0.22) !important;
+}
+
+[data-theme="pe"] .sigla-tag-btn:hover {
+    background: rgba(200, 16, 46, 0.15) !important;
+    border-color: #C8102E !important;
+}
+
+[data-theme="pe"] .sigla-q-mark {
+    background: #C8102E !important;
+    color: #FFFFFF !important;
+}
+
+[data-theme="pe"] .text-emerald-700,
+[data-theme="pe"] .text-emerald-800,
+[data-theme="pe"] .text-emerald-600 {
+    color: #C8102E !important;
+}
+
+[data-theme="pe"] .text-emerald-400 {
+    color: #F87171 !important;
+}
+
+[data-theme="pe"] .bg-emerald-50,
+[data-theme="pe"] .bg-emerald-100 {
+    background-color: #FEF2F2 !important;
 }

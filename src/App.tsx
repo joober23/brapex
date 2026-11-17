@@ -617,7 +617,7 @@ export default function App() {
   );
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${lang === 'es' ? 'theme-peru' : ''}`} data-theme={lang === 'es' ? 'pe' : 'br'}>
 
       {/* TOAST NOTIFICATION */}
       {toastMessage && (
@@ -1368,6 +1368,7 @@ export default function App() {
                     onChange={(e) => handleBrlChange(e.target.value)}
                     onKeyDown={(e) => { if (e.key === 'Enter') converterMoeda(); }}
                     placeholder="0,00"
+                    style={{ background: 'transparent', color: '#FFFFFF', border: 'none', outline: 'none', boxShadow: 'none' }}
                   />
                 </div>
               </div>
