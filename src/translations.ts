@@ -60,7 +60,7 @@ export const TRANSLATIONS = {
 
     // Tela 2: Dashboard
     dashEyebrow: 'PAINEL OPERACIONAL',
-    dashHello: 'Olá, Hermes!',
+    dashHello: 'Olá, BRAPEX!',
     highlightTag: 'INTELIGÊNCIA COMERCIAL',
     intelTitle: 'Radar Regional em Foco',
     intelDesc: 'Veja quais produtos estão liderando as exportações e importações entre o Sudoeste Paulista e o Peru.',
@@ -361,7 +361,7 @@ export const TRANSLATIONS = {
 
     // Tela 2: Dashboard
     dashEyebrow: 'PANEL OPERATIVO',
-    dashHello: '¡Hola, Hermes!',
+    dashHello: '¡Hola, BRAPEX!',
     highlightTag: 'INTELIGENCIA COMERCIAL',
     intelTitle: 'Radar Regional en Foco',
     intelDesc: 'Vea qué productos lideran las exportaciones e importaciones entre el Sudoeste Paulista y Perú.',

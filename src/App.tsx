@@ -325,8 +325,8 @@ export default function App() {
   const [chatInput, setChatInput] = useState<string>('');
 
   // Perfil do Usuário
-  const [userName, setUserName] = useState<string>('Hermes José Dias');
-  const [userEmail, setUserEmail] = useState<string>('hermes.dias@brapex.com.br');
+  const [userName, setUserName] = useState<string>('BRAPEX');
+  const [userEmail, setUserEmail] = useState<string>('contato@brapeximportaexporta.com.br');
   const [userDoc, setUserDoc] = useState<string>('254.785.785-67');
   const [userCompany, setUserCompany] = useState<string>('Brapex Comércio Exterior Sudoeste Paulista Ltda.');
   const [userLocation, setUserLocation] = useState<string>('Itapetininga - SP, Brasil');
@@ -2569,7 +2569,11 @@ export default function App() {
               margin: '0 auto 14px',
               boxShadow: '0 6px 18px rgba(31, 95, 67, 0.3)'
             }}>
-              {userName.split(' ').filter(Boolean).map((n) => n[0]).slice(0, 2).join('').toUpperCase()}
+              {userName.trim().toUpperCase() === 'BRAPEX'
+                ? 'BX'
+                : userName.split(' ').filter(Boolean).length > 1
+                  ? userName.split(' ').filter(Boolean).map((n) => n[0]).slice(0, 2).join('').toUpperCase()
+                  : userName.slice(0, 2).toUpperCase()}
             </div>
             <h3 style={{ fontSize: '1.35rem', fontWeight: 800 }}>{userName}</h3>
             <p style={{ fontSize: '0.86rem', color: 'var(--text-muted)' }}>{userEmail}</p>
